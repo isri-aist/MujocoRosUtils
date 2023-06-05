@@ -7,7 +7,7 @@ set(PROJECT_GENERATED_HEADERS_SKIP_WARNING ON)
 set(PROJECT_URL https://github.com/isri-aist/MujocoRosUtils)
 set(PROJECT_DESCRIPTION "")
 set(CMAKE_CXX_STANDARD 17)
-set(PROJECT_USE_CMAKE_EXPORT TRUE)
+set(PROJECT_USE_CMAKE_EXPORT FALSE)
 set(CXX_DISABLE_WERROR ON)
 set(CMAKE_COLOR_DIAGNOSTICS ON)
 set(DOXYGEN_HTML_OUTPUT html)
@@ -54,7 +54,9 @@ catkin_package(
   std_srvs
   geometry_msgs
   visualization_msgs
-  sensor_msgs)
+  sensor_msgs
+  LIBRARIES
+  MujocoRosUtilsPlugin)
 
 add_subdirectory(plugin)
 
