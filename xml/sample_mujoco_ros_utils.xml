@@ -1,0 +1,42 @@
+<mujoco model="sample_mujoco_ros_utils">
+  <compiler autolimits="true"/>
+
+  <extension>
+    <plugin plugin="MujocoRosUtils::PosePublisher"/>
+  </extension>
+
+  <asset>
+    <texture name="floor" type="2d" builtin="checker" rgb1="0.1 0.2 0.3" rgb2="0.2 0.3 0.4" width="300" height="300" mark="edge" markrgb="0.2 0.3 0.4"/>
+    <material name="floor" texture="floor" texrepeat="10 10" texuniform="true"/>
+  </asset>
+
+  <visual>
+    <headlight ambient="0.7 0.7 0.7" diffuse="0.2 0.2 0.2" specular="0.1 0.1 0.1"/>
+    <map znear="0.01"/>
+    <scale contactwidth="0.02" contactheight="0.5"/>
+  </visual>
+
+  <statistic center="0 0 1" extent="1" meansize="0.1"/>
+
+  <worldbody>
+    <light pos="1 0 0.3" dir="-1 0 -0.3"/>
+    <light pos="-1 0 0.3" dir="1 0 -0.3"/>
+
+    <geom name="floor" type="plane" material="floor" size="1 1 0.01" pos="0 0 -0.01"/>
+
+    <body name="object" pos="0 0 1">
+      <freejoint/>
+      <geom type="box" size="0.2 0.2 0.05" mass="0.1" rgba="0.5 0.5 0.5 0.3"/>
+    </body>
+  </worldbody>
+
+  <sensor>
+    <plugin name="pose_publisher" plugin="MujocoRosUtils::PosePublisher" objtype="xbody" objname="object">
+      <config key="frame_id" value="map"/>
+      <config key="pose_topic_name" value="/tmp/pose"/>
+      <config key="vel_topic_name" value="/tmp/vel"/>
+      <config key="publish_rate" value="30"/>
+      <config key="output_tf" value="false"/>
+    </plugin>
+  </sensor>
+</mujoco>
