@@ -8,13 +8,12 @@
 #include <mujoco/mjtnum.h>
 #include <mujoco/mjvisualize.h>
 
-#include <eigen_conversions/eigen_msg.h>
 #include <string>
 
 namespace mujoco::plugin::sensor
 {
 
-/** \brief Plugin to publish topics and broadcast TF of pose and velocity of the body. */
+/** \brief Plugin to publish topics or broadcast TF of pose and velocity of the body. */
 class PosePublisher
 {
 public:
@@ -49,6 +48,7 @@ protected:
   /** \brief Constructor.
       \param m model
       \param d data
+      \param sensor_id sensor ID
       \param frame_id frame ID
       \param pose_topic_name topic name of pose
       \param vel_topic_name topic name of velocity

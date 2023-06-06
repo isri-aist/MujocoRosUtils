@@ -98,12 +98,11 @@ PosePublisher * PosePublisher::Create(const mjModel * m, mjData * d, int plugin_
 
   // publish_rate
   const char * publish_rate_char = mj_getPluginConfig(m, plugin_id, "publish_rate");
-  if(strlen(publish_rate_char) == 0)
+  mjtNum publish_rate = 30.0;
+  if(strlen(publish_rate_char) > 0)
   {
-    mju_error("[PosePublisher] `publish_rate` is missing.");
-    return nullptr;
+    publish_rate = strtod(publish_rate_char, nullptr);
   }
-  mjtNum publish_rate = strtod(publish_rate_char, nullptr);
   if(publish_rate <= 0)
   {
     mju_error("[PosePublisher] `publish_rate` must be positive.");
@@ -112,17 +111,16 @@ PosePublisher * PosePublisher::Create(const mjModel * m, mjData * d, int plugin_
 
   // output_tf
   const char * output_tf_char = mj_getPluginConfig(m, plugin_id, "output_tf");
-  if(strlen(output_tf_char) == 0)
+  bool output_tf = false;
+  if(strlen(output_tf_char) > 0)
   {
-    mju_error("[PosePublisher] `output_tf` is missing.");
-    return nullptr;
+    if(!(strcmp(output_tf_char, "true") == 0 || strcmp(output_tf_char, "false") == 0))
+    {
+      mju_error("[PosePublisher] `output_tf` must be `true` or `false`.");
+      return nullptr;
+    }
+    output_tf = (strcmp(output_tf_char, "true") == 0);
   }
-  if(!(strcmp(output_tf_char, "true") == 0 || strcmp(output_tf_char, "false") == 0))
-  {
-    mju_error("[PosePublisher] `output_tf` must be `true` or `false`.");
-    return nullptr;
-  }
-  bool output_tf = (strcmp(output_tf_char, "true") == 0);
 
   // tf_child_frame_id
   const char * tf_child_frame_id_char = mj_getPluginConfig(m, plugin_id, "tf_child_frame_id");
@@ -174,7 +172,7 @@ PosePublisher::PosePublisher(const mjModel * m,
   std::string body_name = std::string(mj_id2name(m, mjOBJ_XBODY, body_id_));
   if(frame_id_.empty())
   {
-    frame_id_ = "robot_map";
+    frame_id_ = "map";
   }
   if(pose_topic_name_.empty())
   {
@@ -197,7 +195,11 @@ PosePublisher::PosePublisher(const mjModel * m,
   }
 
   nh_ = std::make_shared<ros::NodeHandle>();
-  if(!output_tf_)
+  if(output_tf_)
+  {
+    tf_br_ = std::make_shared<tf2_ros::TransformBroadcaster>();
+  }
+  else
   {
     pose_pub_ = nh_->advertise<geometry_msgs::PoseStamped>(pose_topic_name_, 1);
     vel_pub_ = nh_->advertise<geometry_msgs::TwistStamped>(vel_topic_name_, 1);
@@ -223,10 +225,6 @@ void PosePublisher::compute(const mjModel * m, mjData * d, int // plugin_id
 
   if(output_tf_)
   {
-    if(!tf_br_)
-    {
-      tf_br_ = std::make_shared<tf2_ros::TransformBroadcaster>();
-    }
     geometry_msgs::TransformStamped msg;
     msg.header.stamp = stamp_now;
     msg.header.frame_id = frame_id_;
