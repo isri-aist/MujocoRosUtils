@@ -6,8 +6,6 @@
 
 #include <mujoco/mujoco.h>
 
-#include "Utils.h"
-
 #include <iostream>
 
 namespace mujoco::plugin::sensor
