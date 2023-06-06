@@ -199,8 +199,11 @@ PosePublisher::PosePublisher(const mjModel * m,
   }
 
   nh_ = std::make_shared<ros::NodeHandle>();
-  pose_pub_ = nh_->advertise<geometry_msgs::PoseStamped>(pose_topic_name_, 1);
-  vel_pub_ = nh_->advertise<geometry_msgs::TwistStamped>(vel_topic_name_, 1);
+  if(!output_tf_)
+  {
+    pose_pub_ = nh_->advertise<geometry_msgs::PoseStamped>(pose_topic_name_, 1);
+    vel_pub_ = nh_->advertise<geometry_msgs::TwistStamped>(vel_topic_name_, 1);
+  }
 }
 
 void PosePublisher::reset(const mjModel *, // m

@@ -1,0 +1,4 @@
+<launch>
+  <node pkg="rviz" type="rviz" name="$(anon rviz)"
+        args="-d $(find mujoco_ros_utils)/launch/display.rviz" />
+</launch>
