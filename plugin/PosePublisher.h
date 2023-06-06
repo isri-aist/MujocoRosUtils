@@ -1,12 +1,14 @@
 #pragma once
 
 #include <ros/ros.h>
+#include <tf2_ros/transform_broadcaster.h>
 
 #include <mujoco/mjdata.h>
 #include <mujoco/mjmodel.h>
 #include <mujoco/mjtnum.h>
 #include <mujoco/mjvisualize.h>
 
+#include <eigen_conversions/eigen_msg.h>
 #include <string>
 
 namespace mujoco::plugin::sensor
@@ -52,6 +54,7 @@ protected:
       \param vel_topic_name topic name of velocity
       \param publish_rate publish rate
       \param output_tf whether to broadcast TF
+      \param tf_child_frame_id child frame ID for TF
   */
   PosePublisher(const mjModel * m,
                 mjData * d,
@@ -60,7 +63,8 @@ protected:
                 const std::string & pose_topic_name,
                 const std::string & vel_topic_name,
                 mjtNum publish_rate,
-                bool output_tf);
+                bool output_tf,
+                const std::string & tf_child_frame_id);
 
 protected:
   //! Sensor ID
@@ -78,14 +82,26 @@ protected:
   //! ROS publisher for velocity
   ros::Publisher vel_pub_;
 
+  //! TF broadcaster
+  std::shared_ptr<tf2_ros::TransformBroadcaster> tf_br_;
+
   //! Frame ID
   std::string frame_id_;
+
+  //! Topic name of pose
+  std::string pose_topic_name_;
+
+  //! Topic name of velocity
+  std::string vel_topic_name_;
 
   //! Iteration interval to skip ROS publish
   int publish_skip_ = 0;
 
   //! Whether to broadcast TF
   bool output_tf_ = false;
+
+  //! Child frame ID for TF
+  std::string tf_child_frame_id_;
 
   //! Iteration count of simulation
   int sim_cnt_ = 0;

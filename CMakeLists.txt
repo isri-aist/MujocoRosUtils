@@ -56,6 +56,7 @@ catkin_package(
   visualization_msgs
   sensor_msgs
   LIBRARIES
+  MujocoRosUtils
   MujocoRosUtilsPlugin)
 
 add_subdirectory(plugin)
