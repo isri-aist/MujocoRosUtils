@@ -49,7 +49,7 @@ protected:
       \param m model
       \param d data
       \param sensor_id sensor ID
-      \param frame_id frame ID
+      \param frame_id frame ID of topics header or TF parent
       \param pose_topic_name topic name of pose
       \param vel_topic_name topic name of velocity
       \param publish_rate publish rate
@@ -85,7 +85,7 @@ protected:
   //! TF broadcaster
   std::shared_ptr<tf2_ros::TransformBroadcaster> tf_br_;
 
-  //! Frame ID
+  //! Frame ID of topics header or TF parent
   std::string frame_id_;
 
   //! Topic name of pose
