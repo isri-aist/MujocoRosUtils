@@ -59,7 +59,7 @@ All of the following attributes are optional.
 - `frame_id`: Frame ID of topics header or TF parent. (Default is `map`)
 - `pose_topic_name`: Topic name of pose. (Default is `mujoco/<body name>/pose`)
 - `vel_topic_name`: Topic name of velocity. (Default is `mujoco/<body name>/vel`)
-- `publish_rate`: Publish rate. Used only when `output_tf` is `false`. (Default is 30.0 [Hz])
+- `publish_rate`: Publish rate. (Default is 30.0 [Hz])
 - `output_tf`: Whether to broadcast TF. (Default is `false`)
 - `tf_child_frame_id`: Child frame ID for TF. Used only when `output_tf` is `true`. (Default is `<body name>`)
 
