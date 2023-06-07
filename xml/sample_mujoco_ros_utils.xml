@@ -2,6 +2,7 @@
   <compiler autolimits="true"/>
 
   <extension>
+    <plugin plugin="MujocoRosUtils::ClockPublisher"/>
     <plugin plugin="MujocoRosUtils::PosePublisher"/>
   </extension>
 
@@ -19,6 +20,12 @@
   <statistic center="0 0 1" extent="1" meansize="0.1"/>
 
   <worldbody>
+    <plugin plugin="MujocoRosUtils::ClockPublisher">
+      <config key="topic_name" value="/clock"/>
+      <config key="publish_rate" value="100"/>
+      <config key="use_sim_time" value="true"/>
+    </plugin>
+
     <light pos="1 0 0.3" dir="-1 0 -0.3"/>
     <light pos="-1 0 0.3" dir="1 0 -0.3"/>
 

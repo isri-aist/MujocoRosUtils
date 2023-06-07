@@ -34,7 +34,7 @@ void PosePublisher::RegisterPlugin()
                            int // sensor_id
                         ) { return 0; };
 
-  plugin.needstage = mjSTAGE_ACC;
+  plugin.needstage = mjSTAGE_VEL;
 
   plugin.init = +[](const mjModel * m, mjData * d, int plugin_id)
   {
