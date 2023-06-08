@@ -61,4 +61,6 @@ catkin_package(
 
 add_subdirectory(plugin)
 
-# if(INSTALL_DOCUMENTATION) add_subdirectory(doc) endif()
+if(INSTALL_DOCUMENTATION)
+  add_subdirectory(doc)
+endif()
