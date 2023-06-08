@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['registerplugin_47',['RegisterPlugin',['../classmujoco_1_1plugin_1_1sensor_1_1ClockPublisher.html#a2d01cf334521de9a1233e13ea34efe4d',1,'mujoco::plugin::sensor::ClockPublisher::RegisterPlugin()'],['../classmujoco_1_1plugin_1_1sensor_1_1PosePublisher.html#a4743e7bd04441f0bf22d9b660a82f402',1,'mujoco::plugin::sensor::PosePublisher::RegisterPlugin()']]],
-  ['reset_48',['reset',['../classmujoco_1_1plugin_1_1sensor_1_1ClockPublisher.html#a4fbb45fb17bdf669ccb753dab15520fa',1,'mujoco::plugin::sensor::ClockPublisher::reset()'],['../classmujoco_1_1plugin_1_1sensor_1_1PosePublisher.html#a648236b80ac0eca0c36e585e9049cf91',1,'mujoco::plugin::sensor::PosePublisher::reset()']]]
+  ['registerplugin_43',['RegisterPlugin',['../classMujocoRosUtils_1_1ClockPublisher.html#a97009e937a7fc75fe415ad2bcfdab6a8',1,'MujocoRosUtils::ClockPublisher::RegisterPlugin()'],['../classMujocoRosUtils_1_1PosePublisher.html#a098e849e8a3dbfb4b806383a29089494',1,'MujocoRosUtils::PosePublisher::RegisterPlugin()']]],
+  ['reset_44',['reset',['../classMujocoRosUtils_1_1ClockPublisher.html#a03942e80b925bf38dd8677b3d9d3f4d3',1,'MujocoRosUtils::ClockPublisher::reset()'],['../classMujocoRosUtils_1_1PosePublisher.html#a770c95620e307bd1d693a1f6ea6fa0c7',1,'MujocoRosUtils::PosePublisher::reset()']]]
 ];

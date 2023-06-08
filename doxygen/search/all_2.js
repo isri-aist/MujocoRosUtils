@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['frame_5fid_5f_6',['frame_id_',['../classmujoco_1_1plugin_1_1sensor_1_1PosePublisher.html#a489bfde3e66cb559d237f57f848d6c8e',1,'mujoco::plugin::sensor::PosePublisher']]]
+  ['frame_5fid_5f_6',['frame_id_',['../classMujocoRosUtils_1_1PosePublisher.html#a2671c2f42d7643e381540a1049d255c2',1,'MujocoRosUtils::PosePublisher']]]
 ];

@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['sensor_5fid_5f_24',['sensor_id_',['../classmujoco_1_1plugin_1_1sensor_1_1PosePublisher.html#a30527ef0426a73d92f39639a235b4979',1,'mujoco::plugin::sensor::PosePublisher']]],
-  ['sim_5fcnt_5f_25',['sim_cnt_',['../classmujoco_1_1plugin_1_1sensor_1_1ClockPublisher.html#a6f02d0d0e8517eac240697c7c1be6b88',1,'mujoco::plugin::sensor::ClockPublisher::sim_cnt_()'],['../classmujoco_1_1plugin_1_1sensor_1_1PosePublisher.html#a91d627ddde704271633a18e5a5a279ca',1,'mujoco::plugin::sensor::PosePublisher::sim_cnt_()']]]
+  ['sensor_5fid_5f_22',['sensor_id_',['../classMujocoRosUtils_1_1PosePublisher.html#ad7148a7d5d4d02c29389cc5b348909dd',1,'MujocoRosUtils::PosePublisher']]],
+  ['sim_5fcnt_5f_23',['sim_cnt_',['../classMujocoRosUtils_1_1ClockPublisher.html#ad85be8675debf94c913ea20eecfa1fef',1,'MujocoRosUtils::ClockPublisher::sim_cnt_()'],['../classMujocoRosUtils_1_1PosePublisher.html#afff957241ca0d8e5f43fc437f24099a1',1,'MujocoRosUtils::PosePublisher::sim_cnt_()']]]
 ];
