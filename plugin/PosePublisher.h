@@ -10,7 +10,7 @@
 
 #include <string>
 
-namespace mujoco::plugin::sensor
+namespace MujocoRosUtils
 {
 
 /** \brief Plugin to publish topics or broadcast TF of pose and velocity of the body. */
@@ -107,4 +107,4 @@ protected:
   int sim_cnt_ = 0;
 };
 
-} // namespace mujoco::plugin::sensor
+} // namespace MujocoRosUtils

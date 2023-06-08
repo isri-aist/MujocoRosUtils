@@ -9,7 +9,7 @@
 
 #include <string>
 
-namespace mujoco::plugin::sensor
+namespace MujocoRosUtils
 {
 
 /** \brief Plugin to publish clock topic. */
@@ -73,4 +73,4 @@ protected:
   int sim_cnt_ = 0;
 };
 
-} // namespace mujoco::plugin::sensor
+} // namespace MujocoRosUtils

@@ -3,7 +3,7 @@
 #include "ClockPublisher.h"
 #include "PosePublisher.h"
 
-namespace mujoco::plugin::sensor
+namespace MujocoRosUtils
 {
 
 mjPLUGIN_LIB_INIT
@@ -12,4 +12,4 @@ mjPLUGIN_LIB_INIT
   PosePublisher::RegisterPlugin();
 }
 
-} // namespace mujoco::plugin::sensor
+} // namespace MujocoRosUtils

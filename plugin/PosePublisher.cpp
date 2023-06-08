@@ -8,7 +8,7 @@
 
 #include <iostream>
 
-namespace mujoco::plugin::sensor
+namespace MujocoRosUtils
 {
 
 void PosePublisher::RegisterPlugin()
@@ -267,4 +267,4 @@ void PosePublisher::compute(const mjModel * m, mjData * d, int // plugin_id
   }
 }
 
-} // namespace mujoco::plugin::sensor
+} // namespace MujocoRosUtils

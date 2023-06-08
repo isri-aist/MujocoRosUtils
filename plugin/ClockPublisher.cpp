@@ -6,7 +6,7 @@
 
 #include <iostream>
 
-namespace mujoco::plugin::sensor
+namespace MujocoRosUtils
 {
 
 void ClockPublisher::RegisterPlugin()
@@ -161,4 +161,4 @@ void ClockPublisher::compute(const mjModel *, // m
   pub_.publish(msg);
 }
 
-} // namespace mujoco::plugin::sensor
+} // namespace MujocoRosUtils
