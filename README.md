@@ -1,6 +1,13 @@
 # [MujocoRosUtils](https://github.com/isri-aist/MujocoRosUtils)
 ROS-based MuJoCo utilities
 
+[![CI](https://github.com/isri-aist/MujocoRosUtils/actions/workflows/ci.yaml/badge.svg)](https://github.com/isri-aist/MujocoRosUtils/actions/workflows/ci.yaml)
+[![Documentation](https://img.shields.io/badge/doxygen-online-brightgreen?logo=read-the-docs&style=flat)](https://isri-aist.github.io/MujocoRosUtils/)
+[![LICENSE](https://img.shields.io/github/license/isri-aist/MujocoRosUtils)](https://github.com/isri-aist/MujocoRosUtils/blob/master/LICENSE)
+
+## Features
+- Since it is in plugin style, you can use it without rebuilding MuJoCo from the source.
+
 ## Install
 
 ### Requirements
