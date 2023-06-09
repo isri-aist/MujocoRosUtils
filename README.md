@@ -37,7 +37,18 @@ $ catkin build mujoco_ros_utils -DCMAKE_BUILD_TYPE=RelWithDebInfo -DMUJOCO_ROOT_
 ```
 Add `source ${HOME}/ros/ws_mujoco/devel/setup.bash` to `${HOME}/.bashrc`.
 
-## Plugin
+## Examples
+Assume that MuJoCo is installed in `${HOME}/.mujoco/mujoco-2.3.5` from release, and the path to the catkin workspace is `${HOME}/ros/ws_mujoco`.
+```bash
+# Terminal 1
+$ cp ${HOME}/ros/ws_mujoco/devel/lib/libMujocoRosUtilsPlugin.so ${HOME}/.mujoco/mujoco-2.3.5/bin/mujoco_plugin
+$ cd ${HOME}/.mujoco/mujoco-2.3.5/bin
+$ ./simulate `rospack find mujoco_ros_utils`/xml/sample_mujoco_ros_utils.xml
+# Terminal 2
+$ roslaunch mujoco_ros_utils display.launch
+```
+
+## Plugins
 ### MujocoRosUtils::ClockPublisher
 Plugin to publish clock topic.
 
