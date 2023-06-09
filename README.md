@@ -5,6 +5,8 @@ ROS-based MuJoCo utilities
 [![Documentation](https://img.shields.io/badge/doxygen-online-brightgreen?logo=read-the-docs&style=flat)](https://isri-aist.github.io/MujocoRosUtils/)
 [![LICENSE](https://img.shields.io/github/license/isri-aist/MujocoRosUtils)](https://github.com/isri-aist/MujocoRosUtils/blob/master/LICENSE)
 
+https://github.com/isri-aist/MujocoRosUtils/assets/6636600/931ce9b7-b18c-4d5b-9619-b48f5fb78b4f
+
 ## Features
 - Since it is in plugin style, you can use it without rebuilding MuJoCo from the source.
 
