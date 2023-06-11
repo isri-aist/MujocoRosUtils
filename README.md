@@ -33,8 +33,11 @@ $ rosdep install -y -r --from-paths src --ignore-src
 # Build a package.
 $ catkin init
 $ catkin config --extend /opt/ros/${ROS_DISTRO}
-$ catkin build mujoco_ros_utils -DCMAKE_BUILD_TYPE=RelWithDebInfo -DMUJOCO_ROOT_DIR=<absolute path to libtorch>
+$ catkin build mujoco_ros_utils -DCMAKE_BUILD_TYPE=RelWithDebInfo -DMUJOCO_ROOT_DIR=<absolute path to MuJoCo>
 ```
+`<absolute path to MuJoCo>` is the path to the root directory of MuJoCo.
+For example, `${HOME}/.mujoco/mujoco-2.3.5` if you installed MuJoCo from release, or `${HOME}/src/mujoco` if you installed it from source.
+
 Add `source ${HOME}/ros/ws_mujoco/devel/setup.bash` to `${HOME}/.bashrc`.
 
 ## Examples
