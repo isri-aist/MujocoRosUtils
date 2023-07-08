@@ -103,3 +103,27 @@ An example of tags to be added to the MJCF file:
 </sensor>
 ```
 The `objtype` attribute must be `xbody`.
+
+### MujocoRosUtils::ExternalForce
+Plugin to apply external force to the body.
+
+All of the following attributes are optional.
+- `topic_name`: Topic name of external force. (Default is `/external_force`)
+- `vis_scale`: Arrow length scale. (Default is 0.1)
+
+An example of tags to be added to the MJCF file:
+```xml
+<extension>
+  <plugin plugin="MujocoRosUtils::ExternalForce"/>
+</extension>
+<worldbody>
+  <body name="object" pos="0 0 1">
+    <freejoint/>
+    <geom type="box" size="0.2 0.2 0.05" mass="0.1" rgba="0.5 0.5 0.5 0.3"/>
+    <plugin plugin="MujocoRosUtils::ExternalForce">
+      <config key="topic_name" value="/external_force"/>
+      <config key="vis_scale" value="0.1"/>
+    </plugin>
+  </body>
+</worldbody>
+```
