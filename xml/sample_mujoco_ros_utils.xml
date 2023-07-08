@@ -4,6 +4,7 @@
   <extension>
     <plugin plugin="MujocoRosUtils::ClockPublisher"/>
     <plugin plugin="MujocoRosUtils::PosePublisher"/>
+    <plugin plugin="MujocoRosUtils::ExternalForce"/>
   </extension>
 
   <asset>
@@ -34,6 +35,10 @@
     <body name="object" pos="0 0 1">
       <freejoint/>
       <geom type="box" size="0.2 0.2 0.05" mass="0.1" rgba="0.5 0.5 0.5 0.3"/>
+      <plugin plugin="MujocoRosUtils::ExternalForce">
+        <config key="topic_name" value="/external_force"/>
+        <config key="vis_scale" value="0.1"/>
+      </plugin>
     </body>
   </worldbody>
 

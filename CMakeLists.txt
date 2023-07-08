@@ -36,7 +36,8 @@ endif()
 
 find_package(
   catkin REQUIRED
-  COMPONENTS roscpp
+  COMPONENTS message_generation
+             roscpp
              tf2_ros
              eigen_conversions
              std_msgs
@@ -45,8 +46,13 @@ find_package(
              visualization_msgs
              sensor_msgs)
 
+add_message_files(FILES ExternalForce.msg)
+
+generate_messages(DEPENDENCIES geometry_msgs)
+
 catkin_package(
   CATKIN_DEPENDS
+  message_runtime
   roscpp
   tf2_ros
   eigen_conversions
