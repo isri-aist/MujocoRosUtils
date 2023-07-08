@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['vel_5fpub_5f_28',['vel_pub_',['../classMujocoRosUtils_1_1PosePublisher.html#a1e1ba9b23353d4ea35661006be743099',1,'MujocoRosUtils::PosePublisher']]],
-  ['vel_5ftopic_5fname_5f_29',['vel_topic_name_',['../classMujocoRosUtils_1_1PosePublisher.html#a328198e6e1828b5bc4cf5a871b4777b1',1,'MujocoRosUtils::PosePublisher']]]
+  ['use_5fsim_5ftime_5f_35',['use_sim_time_',['../classMujocoRosUtils_1_1ClockPublisher.html#ae9fc94a63393aed814d8c84521a1e312',1,'MujocoRosUtils::ClockPublisher']]]
 ];

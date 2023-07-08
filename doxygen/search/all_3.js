@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['mjplugin_5flib_5finit_7',['mjPLUGIN_LIB_INIT',['../namespaceMujocoRosUtils.html#a3ebcf70ffc9a54d21d7055723ea2c6b8',1,'MujocoRosUtils']]],
-  ['mujocorosutils_8',['MujocoRosUtils',['../namespaceMujocoRosUtils.html',1,'']]]
+  ['frame_5fid_5f_12',['frame_id_',['../classMujocoRosUtils_1_1PosePublisher.html#a2671c2f42d7643e381540a1049d255c2',1,'MujocoRosUtils::PosePublisher']]]
 ];
