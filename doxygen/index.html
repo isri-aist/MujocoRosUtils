@@ -154,8 +154,27 @@ $(function() {
 <div class="line">    &lt;<span class="keywordtype">config</span> <span class="keyword">key</span>=<span class="stringliteral">&quot;tf_child_frame_id&quot;</span> <span class="keyword">value</span>=<span class="stringliteral">&quot;object&quot;</span>/&gt;</div>
 <div class="line">  &lt;/<span class="keywordtype">plugin</span>&gt;</div>
 <div class="line">&lt;/<span class="keywordtype">sensor</span>&gt;</div>
-</div><!-- fragment --><p>The <code>objtype</code> attribute must be <code>xbody</code>. </p>
-</div></div><!-- PageDoc -->
+</div><!-- fragment --><p>The <code>objtype</code> attribute must be <code>xbody</code>.</p>
+<h2><a class="el" href="classMujocoRosUtils_1_1ExternalForce.html" title="Plugin to apply external force.">MujocoRosUtils::ExternalForce</a></h2>
+<p>Plugin to apply external force to the body.</p>
+<p>All of the following attributes are optional.</p><ul>
+<li><code>topic_name</code>: Topic name of external force. (Default is <code>/external_force</code>)</li>
+<li><code>vis_scale</code>: Arrow length scale. (Default is 0.1)</li>
+</ul>
+<p>An example of tags to be added to the MJCF file: </p><div class="fragment"><div class="line">&lt;<span class="keywordtype">extension</span>&gt;</div>
+<div class="line">  &lt;<span class="keywordtype">plugin</span> <span class="keyword">plugin</span>=<span class="stringliteral">&quot;MujocoRosUtils::ExternalForce&quot;</span>/&gt;</div>
+<div class="line">&lt;/<span class="keywordtype">extension</span>&gt;</div>
+<div class="line">&lt;<span class="keywordtype">worldbody</span>&gt;</div>
+<div class="line">  &lt;<span class="keywordtype">body</span> <span class="keyword">name</span>=<span class="stringliteral">&quot;object&quot;</span> <span class="keyword">pos</span>=<span class="stringliteral">&quot;0 0 1&quot;</span>&gt;</div>
+<div class="line">    &lt;<span class="keywordtype">freejoint</span>/&gt;</div>
+<div class="line">    &lt;<span class="keywordtype">geom</span> <span class="keyword">type</span>=<span class="stringliteral">&quot;box&quot;</span> <span class="keyword">size</span>=<span class="stringliteral">&quot;0.2 0.2 0.05&quot;</span> <span class="keyword">mass</span>=<span class="stringliteral">&quot;0.1&quot;</span> <span class="keyword">rgba</span>=<span class="stringliteral">&quot;0.5 0.5 0.5 0.3&quot;</span>/&gt;</div>
+<div class="line">    &lt;<span class="keywordtype">plugin</span> <span class="keyword">plugin</span>=<span class="stringliteral">&quot;MujocoRosUtils::ExternalForce&quot;</span>&gt;</div>
+<div class="line">      &lt;<span class="keywordtype">config</span> <span class="keyword">key</span>=<span class="stringliteral">&quot;topic_name&quot;</span> <span class="keyword">value</span>=<span class="stringliteral">&quot;/external_force&quot;</span>/&gt;</div>
+<div class="line">      &lt;<span class="keywordtype">config</span> <span class="keyword">key</span>=<span class="stringliteral">&quot;vis_scale&quot;</span> <span class="keyword">value</span>=<span class="stringliteral">&quot;0.1&quot;</span>/&gt;</div>
+<div class="line">    &lt;/<span class="keywordtype">plugin</span>&gt;</div>
+<div class="line">  &lt;/<span class="keywordtype">body</span>&gt;</div>
+<div class="line">&lt;/<span class="keywordtype">worldbody</span>&gt;</div>
+</div><!-- fragment --> </div></div><!-- PageDoc -->
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
