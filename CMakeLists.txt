@@ -34,6 +34,9 @@ else()
   message(FATAL_ERROR "MuJoCo lib not found.")
 endif()
 
+# GLFW
+find_package(glfw3 3.3 REQUIRED)
+
 find_package(
   catkin REQUIRED
   COMPONENTS message_generation

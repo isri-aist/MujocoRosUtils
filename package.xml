@@ -12,6 +12,7 @@
 
   <buildtool_depend>catkin</buildtool_depend>
 
+  <depend>libglfw3-dev</depend>
   <depend>roscpp</depend>
   <depend>tf2_ros</depend>
   <depend>eigen_conversions</depend>

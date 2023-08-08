@@ -1,4 +1,18 @@
 <launch>
+  <arg name="points" default="false"/>
+
   <node pkg="rviz" type="rviz" name="$(anon rviz)"
         args="-d $(find mujoco_ros_utils)/launch/display.rviz" />
+
+  <group if="$(arg points)">
+    <node pkg="nodelet" type="nodelet" name="nodelet_manager" args="manager"/>
+
+    <node pkg="nodelet" type="nodelet" name="point_cloud_xyzrgb"
+          args="load depth_image_proc/point_cloud_xyzrgb nodelet_manager">
+      <remap from="rgb/camera_info" to="/image/camera_info"/>
+      <remap from="rgb/image_rect_color" to="/image/color"/>
+      <remap from="depth_registered/image_rect" to="/image/depth"/>
+      <remap from="depth_registered/points" to="/points"/>
+    </node>
+  </group>
 </launch>

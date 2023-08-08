@@ -5,9 +5,10 @@ ROS-based MuJoCo utilities
 [![Documentation](https://img.shields.io/badge/doxygen-online-brightgreen?logo=read-the-docs&style=flat)](https://isri-aist.github.io/MujocoRosUtils/)
 [![LICENSE](https://img.shields.io/github/license/isri-aist/MujocoRosUtils)](https://github.com/isri-aist/MujocoRosUtils/blob/master/LICENSE)
 
-https://github.com/isri-aist/MujocoRosUtils/assets/6636600/931ce9b7-b18c-4d5b-9619-b48f5fb78b4f
+https://github.com/isri-aist/MujocoRosUtils/assets/6636600/6cc3bc6c-113d-4a1d-97f5-d75b1000fc8a
 
 ## Features
+- You can retrieve body poses and camera images, and apply external forces to the body in MuJoCo via ROS interfaces.
 - Since it is in plugin style, you can use it without rebuilding MuJoCo from the source.
 
 ## Install
@@ -50,6 +51,8 @@ $ ./simulate `rospack find mujoco_ros_utils`/xml/sample_mujoco_ros_utils.xml
 # Terminal 2
 $ roslaunch mujoco_ros_utils display.launch
 ```
+To visualize a point cloud restored from a depth image, add the `points:=true` option to `display.launch`.
+(`ros-${ROS_DISTRO}-depth-image-proc` must be installed.)
 
 ## Plugins
 ### MujocoRosUtils::ClockPublisher
@@ -127,3 +130,34 @@ An example of tags to be added to the MJCF file:
   </body>
 </worldbody>
 ```
+
+### MujocoRosUtils::ImagePublisher
+Plugin to publish topics of color and depth images.
+
+All of the following attributes are optional.
+- `frame_id`: Frame ID of topics header or TF parent. (Default is `<camera name>`)
+- `color_topic_name`: Topic name of color image. (Default is `mujoco/<camera name>/color`)
+- `depth_topic_name`: Topic name of depth image. (Default is `mujoco/<camera name>/depth`)
+- `info_topic_name`: Topic name of camera information. (Default is `mujoco/<camera name>/camera_info`)
+- `height`: Image height. (Default is 240)
+- `width`: Image width. (Default is 320)
+- `publish_rate`: Publish rate. (Default is 30.0 [Hz])
+
+An example of tags to be added to the MJCF file:
+```xml
+<extension>
+  <plugin plugin="MujocoRosUtils::ImagePublisher"/>
+</extension>
+<sensor>
+  <plugin name="image_publisher" plugin="MujocoRosUtils::ImagePublisher" objtype="camera" objname="camera">
+    <config key="frame_id" value="camera"/>
+    <config key="color_topic_name" value="/image/color"/>
+    <config key="depth_topic_name" value="/image/depth"/>
+    <config key="info_topic_name" value="/image/camera_info"/>
+    <config key="height" value="240"/>
+    <config key="width" value="320"/>
+    <config key="publish_rate" value="30"/>
+  </plugin>
+</sensor>
+```
+The `objtype` attribute must be `camera`.
