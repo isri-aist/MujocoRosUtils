@@ -5,7 +5,7 @@ ROS-based MuJoCo utilities
 [![Documentation](https://img.shields.io/badge/doxygen-online-brightgreen?logo=read-the-docs&style=flat)](https://isri-aist.github.io/MujocoRosUtils/)
 [![LICENSE](https://img.shields.io/github/license/isri-aist/MujocoRosUtils)](https://github.com/isri-aist/MujocoRosUtils/blob/master/LICENSE)
 
-https://github.com/isri-aist/MujocoRosUtils/assets/6636600/931ce9b7-b18c-4d5b-9619-b48f5fb78b4f
+https://github.com/isri-aist/MujocoRosUtils/assets/6636600/6cc3bc6c-113d-4a1d-97f5-d75b1000fc8a
 
 ## Features
 - You can retrieve body poses and camera images, and apply external forces to the body in MuJoCo via ROS interfaces.
