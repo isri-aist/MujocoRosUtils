@@ -1,8 +1,9 @@
 add_library(MujocoRosUtils SHARED ClockPublisher.cpp PosePublisher.cpp
-                                  ExternalForce.cpp)
+                                  ImagePublisher.cpp ExternalForce.cpp)
 target_include_directories(MujocoRosUtils PRIVATE ${MUJOCO_INCLUDE_DIR})
 target_include_directories(MujocoRosUtils PUBLIC ${catkin_INCLUDE_DIRS})
-target_link_libraries(MujocoRosUtils PUBLIC ${LIB_MUJOCO} ${catkin_LIBRARIES})
+target_link_libraries(MujocoRosUtils PUBLIC ${LIB_MUJOCO} ${catkin_LIBRARIES}
+                                            glfw)
 add_dependencies(MujocoRosUtils ${${PROJECT_NAME}_EXPORTED_TARGETS})
 
 add_library(MujocoRosUtilsPlugin SHARED Plugin.cpp)
