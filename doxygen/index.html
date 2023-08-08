@@ -74,9 +74,10 @@ $(function() {
 <div class="contents">
 <div class="textblock"><p>ROS-based MuJoCo utilities</p>
 <p><a href="https://github.com/isri-aist/MujocoRosUtils/actions/workflows/ci.yaml"><object type="image/svg+xml" data="https://github.com/isri-aist/MujocoRosUtils/actions/workflows/ci.yaml/badge.svg" style="pointer-events: none;">CI</object></a> <a href="https://isri-aist.github.io/MujocoRosUtils/"><img src="https://img.shields.io/badge/doxygen-online-brightgreen?logo=read-the-docs&amp;style=flat" alt="Documentation" class="inline"/></a> <a href="https://github.com/isri-aist/MujocoRosUtils/blob/master/LICENSE"><img src="https://img.shields.io/github/license/isri-aist/MujocoRosUtils" alt="LICENSE" class="inline"/></a></p>
-<p><a href="https://github.com/isri-aist/MujocoRosUtils/assets/6636600/931ce9b7-b18c-4d5b-9619-b48f5fb78b4f">https://github.com/isri-aist/MujocoRosUtils/assets/6636600/931ce9b7-b18c-4d5b-9619-b48f5fb78b4f</a></p>
+<p><a href="https://github.com/isri-aist/MujocoRosUtils/assets/6636600/6cc3bc6c-113d-4a1d-97f5-d75b1000fc8a">https://github.com/isri-aist/MujocoRosUtils/assets/6636600/6cc3bc6c-113d-4a1d-97f5-d75b1000fc8a</a></p>
 <h1>Features</h1>
 <ul>
+<li>You can retrieve body poses and camera images, and apply external forces to the body in MuJoCo via ROS interfaces.</li>
 <li>Since it is in plugin style, you can use it without rebuilding MuJoCo from the source.</li>
 </ul>
 <h1>Install</h1>
@@ -112,7 +113,8 @@ $(function() {
 <div class="line">$ ./simulate `rospack find mujoco_ros_utils`/xml/sample_mujoco_ros_utils.xml</div>
 <div class="line"># Terminal 2</div>
 <div class="line">$ roslaunch mujoco_ros_utils display.launch</div>
-</div><!-- fragment --><h1>Plugins</h1>
+</div><!-- fragment --><p>To visualize a point cloud restored from a depth image, add the <code>points:=true</code> option to <code>display.launch</code>. (<code>ros-${ROS_DISTRO}-depth-image-proc</code> must be installed.)</p>
+<h1>Plugins</h1>
 <h2><a class="el" href="classMujocoRosUtils_1_1ClockPublisher.html" title="Plugin to publish clock topic.">MujocoRosUtils::ClockPublisher</a></h2>
 <p>Plugin to publish clock topic.</p>
 <p>All of the following attributes are optional.</p><ul>
@@ -174,7 +176,33 @@ $(function() {
 <div class="line">    &lt;/<span class="keywordtype">plugin</span>&gt;</div>
 <div class="line">  &lt;/<span class="keywordtype">body</span>&gt;</div>
 <div class="line">&lt;/<span class="keywordtype">worldbody</span>&gt;</div>
-</div><!-- fragment --> </div></div><!-- PageDoc -->
+</div><!-- fragment --><h2><a class="el" href="classMujocoRosUtils_1_1ImagePublisher.html" title="Plugin to publish topics of color and depth images.">MujocoRosUtils::ImagePublisher</a></h2>
+<p>Plugin to publish topics of color and depth images.</p>
+<p>All of the following attributes are optional.</p><ul>
+<li><code>frame_id</code>: Frame ID of topics header or TF parent. (Default is <code>&lt;camera name&gt;</code>)</li>
+<li><code>color_topic_name</code>: Topic name of color image. (Default is <code>mujoco/&lt;camera name&gt;/color</code>)</li>
+<li><code>depth_topic_name</code>: Topic name of depth image. (Default is <code>mujoco/&lt;camera name&gt;/depth</code>)</li>
+<li><code>info_topic_name</code>: Topic name of camera information. (Default is <code>mujoco/&lt;camera name&gt;/camera_info</code>)</li>
+<li><code>height</code>: Image height. (Default is 240)</li>
+<li><code>width</code>: Image width. (Default is 320)</li>
+<li><code>publish_rate</code>: Publish rate. (Default is 30.0 [Hz])</li>
+</ul>
+<p>An example of tags to be added to the MJCF file: </p><div class="fragment"><div class="line">&lt;<span class="keywordtype">extension</span>&gt;</div>
+<div class="line">  &lt;<span class="keywordtype">plugin</span> <span class="keyword">plugin</span>=<span class="stringliteral">&quot;MujocoRosUtils::ImagePublisher&quot;</span>/&gt;</div>
+<div class="line">&lt;/<span class="keywordtype">extension</span>&gt;</div>
+<div class="line">&lt;<span class="keywordtype">sensor</span>&gt;</div>
+<div class="line">  &lt;<span class="keywordtype">plugin</span> <span class="keyword">name</span>=<span class="stringliteral">&quot;image_publisher&quot;</span> <span class="keyword">plugin</span>=<span class="stringliteral">&quot;MujocoRosUtils::ImagePublisher&quot;</span> <span class="keyword">objtype</span>=<span class="stringliteral">&quot;camera&quot;</span> <span class="keyword">objname</span>=<span class="stringliteral">&quot;camera&quot;</span>&gt;</div>
+<div class="line">    &lt;<span class="keywordtype">config</span> <span class="keyword">key</span>=<span class="stringliteral">&quot;frame_id&quot;</span> <span class="keyword">value</span>=<span class="stringliteral">&quot;camera&quot;</span>/&gt;</div>
+<div class="line">    &lt;<span class="keywordtype">config</span> <span class="keyword">key</span>=<span class="stringliteral">&quot;color_topic_name&quot;</span> <span class="keyword">value</span>=<span class="stringliteral">&quot;/image/color&quot;</span>/&gt;</div>
+<div class="line">    &lt;<span class="keywordtype">config</span> <span class="keyword">key</span>=<span class="stringliteral">&quot;depth_topic_name&quot;</span> <span class="keyword">value</span>=<span class="stringliteral">&quot;/image/depth&quot;</span>/&gt;</div>
+<div class="line">    &lt;<span class="keywordtype">config</span> <span class="keyword">key</span>=<span class="stringliteral">&quot;info_topic_name&quot;</span> <span class="keyword">value</span>=<span class="stringliteral">&quot;/image/camera_info&quot;</span>/&gt;</div>
+<div class="line">    &lt;<span class="keywordtype">config</span> <span class="keyword">key</span>=<span class="stringliteral">&quot;height&quot;</span> <span class="keyword">value</span>=<span class="stringliteral">&quot;240&quot;</span>/&gt;</div>
+<div class="line">    &lt;<span class="keywordtype">config</span> <span class="keyword">key</span>=<span class="stringliteral">&quot;width&quot;</span> <span class="keyword">value</span>=<span class="stringliteral">&quot;320&quot;</span>/&gt;</div>
+<div class="line">    &lt;<span class="keywordtype">config</span> <span class="keyword">key</span>=<span class="stringliteral">&quot;publish_rate&quot;</span> <span class="keyword">value</span>=<span class="stringliteral">&quot;30&quot;</span>/&gt;</div>
+<div class="line">  &lt;/<span class="keywordtype">plugin</span>&gt;</div>
+<div class="line">&lt;/<span class="keywordtype">sensor</span>&gt;</div>
+</div><!-- fragment --><p>The <code>objtype</code> attribute must be <code>camera</code>. </p>
+</div></div><!-- PageDoc -->
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
