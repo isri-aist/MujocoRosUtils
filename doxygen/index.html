@@ -211,8 +211,10 @@ $(function() {
 <p>An example of tags to be added to the MJCF file: </p><div class="fragment"><div class="line">&lt;<span class="keywordtype">extension</span>&gt;</div>
 <div class="line">  &lt;<span class="keywordtype">plugin</span> <span class="keyword">plugin</span>=<span class="stringliteral">&quot;MujocoRosUtils::ActuatorCommand&quot;</span>/&gt;</div>
 <div class="line">&lt;/<span class="keywordtype">extension</span>&gt;</div>
+<div class="line"> </div>
+<div class="line"><span class="comment">&lt;!-- Define an actuator named &quot;camera_pan&quot;. --&gt;</span></div>
+<div class="line"> </div>
 <div class="line">&lt;<span class="keywordtype">actuator</span>&gt;</div>
-<div class="line">  &lt;<span class="keywordtype">position</span> <span class="keyword">name</span>=<span class="stringliteral">&quot;camera_pan&quot;</span> <span class="keyword">joint</span>=<span class="stringliteral">&quot;camera_pan&quot;</span>/&gt;</div>
 <div class="line">  &lt;<span class="keywordtype">plugin</span> <span class="keyword">plugin</span>=<span class="stringliteral">&quot;MujocoRosUtils::ActuatorCommand&quot;</span> <span class="keyword">joint</span>=<span class="stringliteral">&quot;camera_pan&quot;</span>&gt;</div>
 <div class="line">    &lt;<span class="keywordtype">config</span> <span class="keyword">key</span>=<span class="stringliteral">&quot;actuator_name&quot;</span> <span class="keyword">value</span>=<span class="stringliteral">&quot;camera_pan&quot;</span>/&gt;</div>
 <div class="line">    &lt;<span class="keywordtype">config</span> <span class="keyword">key</span>=<span class="stringliteral">&quot;topic_name&quot;</span> <span class="keyword">value</span>=<span class="stringliteral">&quot;/camera_pan&quot;</span>/&gt;</div>
