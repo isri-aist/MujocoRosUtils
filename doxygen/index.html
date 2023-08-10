@@ -203,15 +203,16 @@ $(function() {
 <div class="line">&lt;/<span class="keywordtype">sensor</span>&gt;</div>
 </div><!-- fragment --><p>The <code>objtype</code> attribute must be <code>camera</code>.</p>
 <h2><a class="el" href="classMujocoRosUtils_1_1ActuatorCommand.html" title="Plugin to send a command to an actuator via ROS topic.">MujocoRosUtils::ActuatorCommand</a></h2>
-<p>Plugin to publish topics of color and depth images.</p>
-<p>All of the following attributes are optional.</p><ul>
+<p>Plugin to send a command to an actuator via ROS topic.</p>
+<p>The following attributes are required.</p><ul>
 <li><code>actuator_name</code>: Actuator name to which the command is sent.</li>
-<li><code>topic_name</code>: Topic name of actuator command.</li>
+<li><code>topic_name</code>: Topic name of actuator command. (Default is <code>mujoco/&lt;actuator name&gt;</code>)</li>
 </ul>
 <p>An example of tags to be added to the MJCF file: </p><div class="fragment"><div class="line">&lt;<span class="keywordtype">extension</span>&gt;</div>
 <div class="line">  &lt;<span class="keywordtype">plugin</span> <span class="keyword">plugin</span>=<span class="stringliteral">&quot;MujocoRosUtils::ActuatorCommand&quot;</span>/&gt;</div>
 <div class="line">&lt;/<span class="keywordtype">extension</span>&gt;</div>
 <div class="line">&lt;<span class="keywordtype">actuator</span>&gt;</div>
+<div class="line">  &lt;<span class="keywordtype">position</span> <span class="keyword">name</span>=<span class="stringliteral">&quot;camera_pan&quot;</span> <span class="keyword">joint</span>=<span class="stringliteral">&quot;camera_pan&quot;</span>/&gt;</div>
 <div class="line">  &lt;<span class="keywordtype">plugin</span> <span class="keyword">plugin</span>=<span class="stringliteral">&quot;MujocoRosUtils::ActuatorCommand&quot;</span> <span class="keyword">joint</span>=<span class="stringliteral">&quot;camera_pan&quot;</span>&gt;</div>
 <div class="line">    &lt;<span class="keywordtype">config</span> <span class="keyword">key</span>=<span class="stringliteral">&quot;actuator_name&quot;</span> <span class="keyword">value</span>=<span class="stringliteral">&quot;camera_pan&quot;</span>/&gt;</div>
 <div class="line">    &lt;<span class="keywordtype">config</span> <span class="keyword">key</span>=<span class="stringliteral">&quot;topic_name&quot;</span> <span class="keyword">value</span>=<span class="stringliteral">&quot;/camera_pan&quot;</span>/&gt;</div>
