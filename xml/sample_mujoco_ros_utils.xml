@@ -62,6 +62,7 @@
 
     <plugin plugin="MujocoRosUtils::ActuatorCommand" joint="camera_pan">
       <config key="actuator_name" value="camera_pan"/>
+      <config key="topic_name" value="/camera_pan"/>
     </plugin>
   </actuator>
 

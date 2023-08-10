@@ -8,7 +8,7 @@ ROS-based MuJoCo utilities
 https://github.com/isri-aist/MujocoRosUtils/assets/6636600/6cc3bc6c-113d-4a1d-97f5-d75b1000fc8a
 
 ## Features
-- You can retrieve body poses and camera images, and apply external forces to the body in MuJoCo via ROS interfaces.
+- You can retrieve body poses and camera images, send commands to actuators, and apply external forces to the body in MuJoCo via ROS interfaces.
 - Since it is in plugin style, you can use it without rebuilding MuJoCo from the source.
 
 ## Install
@@ -161,3 +161,28 @@ An example of tags to be added to the MJCF file:
 </sensor>
 ```
 The `objtype` attribute must be `camera`.
+
+### MujocoRosUtils::ActuatorCommand
+Plugin to send a command to an actuator via ROS topic.
+
+The following attributes are required.
+- `actuator_name`: Actuator name to which the command is sent.
+- `topic_name`: Topic name of actuator command. (Default is `mujoco/<actuator name>`)
+
+An example of tags to be added to the MJCF file:
+```xml
+<extension>
+  <plugin plugin="MujocoRosUtils::ActuatorCommand"/>
+</extension>
+<actuator>
+  <position name="camera_pan" joint="camera_pan"/>
+  <plugin plugin="MujocoRosUtils::ActuatorCommand" joint="camera_pan">
+    <config key="actuator_name" value="camera_pan"/>
+    <config key="topic_name" value="/camera_pan"/>
+  </plugin>
+</actuator>
+```
+In the `plugin` element, you need to specify the `joint`, `body`, etc. of the actuator to be controlled.
+This information is not used in the plugin, but is necessary to avoid errors in MJCF parsing.
+
+The plugin itself is also added to the list of actuators, but it is a dummy actuator. The unwanted increase in the number of actuators (which also increases the dimension of `d->ctrl`) is a problem that should be solved in the future.
