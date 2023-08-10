@@ -77,7 +77,7 @@ $(function() {
 <p><a href="https://github.com/isri-aist/MujocoRosUtils/assets/6636600/6cc3bc6c-113d-4a1d-97f5-d75b1000fc8a">https://github.com/isri-aist/MujocoRosUtils/assets/6636600/6cc3bc6c-113d-4a1d-97f5-d75b1000fc8a</a></p>
 <h1>Features</h1>
 <ul>
-<li>You can retrieve body poses and camera images, and apply external forces to the body in MuJoCo via ROS interfaces.</li>
+<li>You can retrieve body poses and camera images, send commands to actuators, and apply external forces to the body in MuJoCo via ROS interfaces.</li>
 <li>Since it is in plugin style, you can use it without rebuilding MuJoCo from the source.</li>
 </ul>
 <h1>Install</h1>
@@ -201,7 +201,24 @@ $(function() {
 <div class="line">    &lt;<span class="keywordtype">config</span> <span class="keyword">key</span>=<span class="stringliteral">&quot;publish_rate&quot;</span> <span class="keyword">value</span>=<span class="stringliteral">&quot;30&quot;</span>/&gt;</div>
 <div class="line">  &lt;/<span class="keywordtype">plugin</span>&gt;</div>
 <div class="line">&lt;/<span class="keywordtype">sensor</span>&gt;</div>
-</div><!-- fragment --><p>The <code>objtype</code> attribute must be <code>camera</code>. </p>
+</div><!-- fragment --><p>The <code>objtype</code> attribute must be <code>camera</code>.</p>
+<h2><a class="el" href="classMujocoRosUtils_1_1ActuatorCommand.html" title="Plugin to send a command to an actuator via ROS topic.">MujocoRosUtils::ActuatorCommand</a></h2>
+<p>Plugin to send a command to an actuator via ROS topic.</p>
+<p>All of the following attributes are optional.</p><ul>
+<li><code>actuator_name</code>: Actuator name to which the command is sent.</li>
+<li><code>topic_name</code>: Topic name of actuator command.</li>
+</ul>
+<p>An example of tags to be added to the MJCF file: </p><div class="fragment"><div class="line">&lt;<span class="keywordtype">extension</span>&gt;</div>
+<div class="line">  &lt;<span class="keywordtype">plugin</span> <span class="keyword">plugin</span>=<span class="stringliteral">&quot;MujocoRosUtils::ActuatorCommand&quot;</span>/&gt;</div>
+<div class="line">&lt;/<span class="keywordtype">extension</span>&gt;</div>
+<div class="line">&lt;<span class="keywordtype">actuator</span>&gt;</div>
+<div class="line">  &lt;<span class="keywordtype">plugin</span> <span class="keyword">plugin</span>=<span class="stringliteral">&quot;MujocoRosUtils::ActuatorCommand&quot;</span> <span class="keyword">joint</span>=<span class="stringliteral">&quot;camera_pan&quot;</span>&gt;</div>
+<div class="line">    &lt;<span class="keywordtype">config</span> <span class="keyword">key</span>=<span class="stringliteral">&quot;actuator_name&quot;</span> <span class="keyword">value</span>=<span class="stringliteral">&quot;camera_pan&quot;</span>/&gt;</div>
+<div class="line">    &lt;<span class="keywordtype">config</span> <span class="keyword">key</span>=<span class="stringliteral">&quot;topic_name&quot;</span> <span class="keyword">value</span>=<span class="stringliteral">&quot;/camera_pan&quot;</span>/&gt;</div>
+<div class="line">  &lt;/<span class="keywordtype">plugin</span>&gt;</div>
+<div class="line">&lt;/<span class="keywordtype">actuator</span>&gt;</div>
+</div><!-- fragment --><p>In the <code>plugin</code> element, you need to specify the <code>joint</code>, <code>body</code>, etc. of the actuator to be controlled. This information is not used in the plugin, but is necessary to avoid errors in MJCF parsing.</p>
+<p>The plugin itself is also added to the list of actuators, but it is a dummy actuator. The unwanted increase in the number of actuators (which also increases the dimension of <code>d-&gt;ctrl</code>) is a problem that should be solved in the future. </p>
 </div></div><!-- PageDoc -->
 </div><!-- contents -->
 <!-- start footer part -->
