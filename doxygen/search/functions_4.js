@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['posepublisher_80',['PosePublisher',['../classMujocoRosUtils_1_1PosePublisher.html#a7a8687d47b7bd37b35f14b61701b624a',1,'MujocoRosUtils::PosePublisher::PosePublisher(PosePublisher &amp;&amp;)=default'],['../classMujocoRosUtils_1_1PosePublisher.html#a5288e1171551185bd9162da718cb6be5',1,'MujocoRosUtils::PosePublisher::PosePublisher(const mjModel *m, mjData *d, int sensor_id, const std::string &amp;frame_id, const std::string &amp;pose_topic_name, const std::string &amp;vel_topic_name, mjtNum publish_rate, bool output_tf, const std::string &amp;tf_child_frame_id)']]]
+  ['imagepublisher_88',['ImagePublisher',['../classMujocoRosUtils_1_1ImagePublisher.html#a560d2b656956b7afc33c4906c79fd532',1,'MujocoRosUtils::ImagePublisher::ImagePublisher(ImagePublisher &amp;&amp;)=default'],['../classMujocoRosUtils_1_1ImagePublisher.html#a5d3b67e09d77f56ba0eaa0d4097e1d47',1,'MujocoRosUtils::ImagePublisher::ImagePublisher(const mjModel *m, mjData *d, int sensor_id, const std::string &amp;frame_id, std::string color_topic_name, std::string depth_topic_name, std::string info_topic_name, int height, int width, mjtNum publish_rate)']]]
 ];

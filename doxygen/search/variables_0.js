@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['body_5fid_5f_84',['body_id_',['../classMujocoRosUtils_1_1ExternalForce.html#a15e096837f4b65a768dc0018f3f1c297',1,'MujocoRosUtils::ExternalForce::body_id_()'],['../classMujocoRosUtils_1_1PosePublisher.html#ad3fd531dfeff120a546a492e8efffdf8',1,'MujocoRosUtils::PosePublisher::body_id_()']]]
+  ['actuator_5fid_5f_93',['actuator_id_',['../classMujocoRosUtils_1_1ActuatorCommand.html#a0eefa545d6f867ca7b8e6be3f6a0a5d4',1,'MujocoRosUtils::ActuatorCommand']]]
 ];

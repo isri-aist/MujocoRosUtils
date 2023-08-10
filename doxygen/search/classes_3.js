@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['posepublisher_61',['PosePublisher',['../classMujocoRosUtils_1_1PosePublisher.html',1,'MujocoRosUtils']]]
+  ['imagepublisher_66',['ImagePublisher',['../classMujocoRosUtils_1_1ImagePublisher.html',1,'MujocoRosUtils']]]
 ];
