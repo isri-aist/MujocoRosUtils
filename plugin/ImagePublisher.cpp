@@ -277,6 +277,10 @@ void ImagePublisher::compute(const mjModel * m, mjData * d, int // plugin_id
     return;
   }
 
+  // Make context current
+  // \todo Is it OK to override the current context of OpenGL?
+  glfwMakeContextCurrent(window_);
+
   // Update abstract scene
   mjv_updateScene(m, d, &option_, nullptr, &camera_, mjCAT_STATIC | mjCAT_DYNAMIC, &scene_);
 
