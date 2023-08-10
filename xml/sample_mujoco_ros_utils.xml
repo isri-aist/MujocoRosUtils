@@ -5,6 +5,7 @@
     <plugin plugin="MujocoRosUtils::ClockPublisher"/>
     <plugin plugin="MujocoRosUtils::PosePublisher"/>
     <plugin plugin="MujocoRosUtils::ImagePublisher"/>
+    <plugin plugin="MujocoRosUtils::ActuatorCommand"/>
     <plugin plugin="MujocoRosUtils::ExternalForce"/>
   </extension>
 
@@ -58,6 +59,10 @@
   <actuator>
     <position name="camera_pan" joint="camera_pan"/>
     <position name="camera_tilt" joint="camera_tilt"/>
+
+    <plugin plugin="MujocoRosUtils::ActuatorCommand" joint="camera_pan">
+      <config key="actuator_name" value="camera_pan"/>
+    </plugin>
   </actuator>
 
   <sensor>
