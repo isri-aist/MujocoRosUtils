@@ -13,7 +13,9 @@ void ActuatorCommand::RegisterPlugin()
   mjp_defaultPlugin(&plugin);
 
   plugin.name = "MujocoRosUtils::ActuatorCommand";
+  // Allow plugins to be placed on either the body element or the actuator element
   plugin.capabilityflags |= mjPLUGIN_ACTUATOR;
+  plugin.capabilityflags |= mjPLUGIN_PASSIVE;
 
   const char * attributes[] = {"actuator_name", "topic_name"};
 
