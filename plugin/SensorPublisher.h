@@ -122,7 +122,9 @@ protected:
                   int sensor_id,
                   int target_sensor_id,
                   std::string sensor_name,
-                  std::string topic_name);
+                  std::string topic_name,
+                  mjtNum publish_rate,
+                  bool use_sim_time);
 
   /** \brief initSensors.
     \param model model
@@ -161,6 +163,15 @@ protected:
 
   //! ROS publisher and sensor name
   std::map<std::string, std::pair<ros::Publisher, std::string>> sensor_map_;
+
+  //! Iteration interval to skip ROS publish
+  int publish_skip_ = 0;
+
+  //! Value of `use_sim_time` rosparam
+  bool use_sim_time_ = false;
+
+  //! Iteration count of simulation
+  int sim_cnt_ = 0;
 
   //! Sensor name
   const std::map<int, std::string> SENSOR_STRING = {{mjSENS_TOUCH, "touch"},

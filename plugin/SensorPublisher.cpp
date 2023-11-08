@@ -14,7 +14,7 @@ void SensorPublisher::RegisterPlugin()
   plugin.name = "MujocoRosUtils::SensorPublisher";
   plugin.capabilityflags |= mjPLUGIN_SENSOR;
 
-  const char * attributes[] = {"sensor_name", "topic_name"};
+  const char * attributes[] = {"sensor_name", "topic_name", "publish_rate", "use_sim_time"};
 
   plugin.nattribute = sizeof(attributes) / sizeof(attributes[0]);
   plugin.attributes = attributes;
@@ -23,7 +23,8 @@ void SensorPublisher::RegisterPlugin()
                       int // plugin_id
                    ) { return 0; };
 
-  plugin.nsensordata = +[](const mjModel * m, int plugin_id, int // sensor_id
+  plugin.nsensordata = +[](const mjModel * m, int plugin_id,
+                           int // sensor_id
                         ) { return 0; };
 
   // Can only run after forces have been computed
@@ -112,9 +113,36 @@ SensorPublisher * SensorPublisher::Create(const mjModel * m, mjData * d, int plu
     topic_name = std::string(topic_name_char);
   }
 
+  // publish_rate
+  const char * publish_rate_char = mj_getPluginConfig(m, plugin_id, "publish_rate");
+  mjtNum publish_rate = 100.0;
+  if(strlen(publish_rate_char) > 0)
+  {
+    publish_rate = strtod(publish_rate_char, nullptr);
+  }
+  if(publish_rate <= 0)
+  {
+    mju_error("[SensorPublisher] `publish_rate` must be positive.");
+    return nullptr;
+  }
+
+  // use_sim_time
+  const char * use_sim_time_char = mj_getPluginConfig(m, plugin_id, "use_sim_time");
+  bool use_sim_time = true;
+  if(strlen(use_sim_time_char) > 0)
+  {
+    if(!(strcmp(use_sim_time_char, "true") == 0 || strcmp(use_sim_time_char, "false") == 0))
+    {
+      mju_error("[SensorPublisher] `use_sim_time` must be `true` or `false`.");
+      return nullptr;
+    }
+    use_sim_time = (strcmp(use_sim_time_char, "true") == 0);
+  }
+
   std::cout << "[SensorPublisher] Create." << std::endl;
 
-  return new SensorPublisher(m, d, sensor_id, target_sensor_id, sensor_name_char, topic_name_char);
+  return new SensorPublisher(m, d, sensor_id, target_sensor_id, sensor_name_char, topic_name_char, publish_rate,
+                             use_sim_time);
 }
 
 SensorPublisher::SensorPublisher(const mjModel * m,
@@ -122,9 +150,12 @@ SensorPublisher::SensorPublisher(const mjModel * m,
                                  int sensor_id,
                                  int target_sensor_id,
                                  std::string sensor_name,
-                                 std::string topic_name)
+                                 std::string topic_name,
+                                 mjtNum publish_rate,
+                                 bool use_sim_time)
 : sensor_name_(sensor_name), sensor_id_(sensor_id), target_sensor_id_(target_sensor_id),
-  site_id_(m->sensor_objid[sensor_id])
+  site_id_(m->sensor_objid[sensor_id]),
+  publish_skip_(std::max(static_cast<int>(1.0 / (publish_rate * m->opt.timestep)), 1)), use_sim_time_(use_sim_time)
 {
   if(topic_name.empty())
   {
@@ -140,6 +171,7 @@ SensorPublisher::SensorPublisher(const mjModel * m,
   }
 
   nh_ = std::make_shared<ros::NodeHandle>();
+  nh_->setParam("/use_sim_time", use_sim_time_);
   initSensors(m, topic_name);
 }
 
@@ -297,6 +329,12 @@ void SensorPublisher::reset(const mjModel *, // m
 void SensorPublisher::compute(const mjModel * m, mjData * d, int // plugin_id
 )
 {
+  sim_cnt_++;
+  if(sim_cnt_ % publish_skip_ != 0)
+  {
+    return;
+  }
+
   mjMARKSTACK;
   ros::Publisher pub;
   std::string frame_id, sensor_name;

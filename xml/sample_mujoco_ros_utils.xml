@@ -102,6 +102,7 @@
     <plugin name="sensor_publisher" plugin="MujocoRosUtils::SensorPublisher" objtype="xbody" objname="object">
       <config key="sensor_name" value="box_sensor"/>
       <config key="topic_name" value="/rangefinder"/>
+      <config key="publish_rate" value="30"/>
     </plugin>
   </sensor>
 </mujoco>
