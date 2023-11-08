@@ -49,12 +49,7 @@ find_package(
              visualization_msgs
              sensor_msgs)
 
-add_message_files(
-  FILES
-  ScalarStamped.msg
-  ExternalForce.msg
-  )
-
+add_message_files(FILES ScalarStamped.msg ExternalForce.msg)
 
 generate_messages(DEPENDENCIES geometry_msgs)
 
