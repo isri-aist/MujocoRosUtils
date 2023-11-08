@@ -70,36 +70,34 @@ SensorPublisher * SensorPublisher::Create(const mjModel * m, mjData * d, int plu
   }
 
   std::vector<std::string> sensor_name_list;
-  for(int sensor_id_ = 0; sensor_id_ < m->nsensor; sensor_id_++)
+  for(int n = 0; n < m->nsensor; n++)
   {
-    if(m->names[m->name_sensoradr[sensor_id_]])
+    if(m->names[m->name_sensoradr[n]])
     {
-      sensor_name_list.push_back(mj_id2name(m, mjOBJ_SENSOR, sensor_id_));
+      sensor_name_list.push_back(mj_id2name(m, mjOBJ_SENSOR, n));
     }
   }
 
   if((std::find(sensor_name_list.begin(), sensor_name_list.end(), std::string(sensor_name_char)))
-     != sensor_name_list.end())
-  {
-    std::cout << "Find the " << sensor_name_char << std::endl;
-  }
-  else
+     == sensor_name_list.end())
   {
     mju_error("[SensorPublisher] The sensor name is not found in sensors.");
     return nullptr;
   }
 
-  // Set sensor_id
-  int sensor_id =
+  int target_sensor_id =
       std::distance(sensor_name_list.begin(),
                     (std::find(sensor_name_list.begin(), sensor_name_list.end(), std::string(sensor_name_char))));
-  //   for(; sensor_id < m->nsensor; sensor_id++)
-  //   {
-  //     if(m->sensor_type[sensor_id] == mjSENS_PLUGIN && m->sensor_plugin[sensor_id] == plugin_id)
-  //     {
-  //       break;
-  //     }
-  //   }
+
+  // Set sensor_id
+  int sensor_id = 0;
+  for(; sensor_id < m->nsensor; sensor_id++)
+  {
+    if(m->sensor_type[sensor_id] == mjSENS_PLUGIN && m->sensor_plugin[sensor_id] == plugin_id)
+    {
+      break;
+    }
+  }
   if(sensor_id == m->nsensor)
   {
     mju_error("[SensorPublisher] Plugin not found in sensors.");
@@ -116,15 +114,17 @@ SensorPublisher * SensorPublisher::Create(const mjModel * m, mjData * d, int plu
 
   std::cout << "[SensorPublisher] Create." << std::endl;
 
-  return new SensorPublisher(m, d, sensor_id, sensor_name_char, topic_name_char);
+  return new SensorPublisher(m, d, sensor_id, target_sensor_id, sensor_name_char, topic_name_char);
 }
 
 SensorPublisher::SensorPublisher(const mjModel * m,
                                  mjData *, // d
                                  int sensor_id,
+                                 int target_sensor_id,
                                  std::string sensor_name,
                                  std::string topic_name)
-: sensor_name_(sensor_name), sensor_id_(sensor_id), site_id_(m->sensor_objid[sensor_id])
+: sensor_name_(sensor_name), sensor_id_(sensor_id), target_sensor_id_(target_sensor_id),
+  site_id_(m->sensor_objid[sensor_id])
 {
   if(topic_name.empty())
   {
@@ -148,19 +148,19 @@ SensorPublisher::~SensorPublisher() {}
 void SensorPublisher::initSensors(const mjModel * model, std::string topic_name)
 {
   std::string sensor_name, site, frame_id;
-  int adr = model->sensor_adr[sensor_id_];
-  int site_id = model->sensor_objid[sensor_id_];
+  int adr = model->sensor_adr[target_sensor_id_];
+  int site_id = model->sensor_objid[target_sensor_id_];
   int parent_id = model->site_bodyid[site_id];
-  int type = model->sensor_type[sensor_id_];
+  int type = model->sensor_type[target_sensor_id_];
 
   // load only candidate sensors
   if(SENSOR_STRING.find(type) != SENSOR_STRING.end())
   {
-    site = mj_id2name(model, model->sensor_objtype[sensor_id_], site_id);
+    site = mj_id2name(model, model->sensor_objtype[target_sensor_id_], site_id);
 
-    if(model->names[model->name_sensoradr[sensor_id_]])
+    if(model->names[model->name_sensoradr[target_sensor_id_]])
     {
-      sensor_name = mj_id2name(model, mjOBJ_SENSOR, sensor_id_);
+      sensor_name = mj_id2name(model, mjOBJ_SENSOR, target_sensor_id_);
     }
     else
     {
@@ -180,10 +180,10 @@ void SensorPublisher::initSensors(const mjModel * model, std::string topic_name)
         case mjSENS_FRAMELINVEL:
         case mjSENS_FRAMELINACC:
         case mjSENS_FRAMEANGACC:
-          int refid = model->sensor_refid[sensor_id_];
+          int refid = model->sensor_refid[target_sensor_id_];
           if(refid != -1)
           {
-            int reftype = model->sensor_reftype[sensor_id_];
+            int reftype = model->sensor_reftype[target_sensor_id_];
             if(reftype == mjOBJ_SITE)
             {
               refid = model->site_bodyid[refid];
@@ -206,10 +206,10 @@ void SensorPublisher::initSensors(const mjModel * model, std::string topic_name)
         break;
         {
           case mjSENS_FRAMEPOS:
-            int refid = model->sensor_refid[sensor_id_];
+            int refid = model->sensor_refid[target_sensor_id_];
             if(refid != -1)
             {
-              int reftype = model->sensor_reftype[sensor_id_];
+              int reftype = model->sensor_reftype[target_sensor_id_];
               if(reftype == mjOBJ_SITE)
               {
                 refid = model->site_bodyid[refid];
@@ -304,13 +304,13 @@ void SensorPublisher::compute(const mjModel * m, mjData * d, int // plugin_id
   int adr, type;
   mjtNum cutoff;
 
-  adr = m->sensor_adr[sensor_id_];
-  type = m->sensor_type[sensor_id_];
-  cutoff = (m->sensor_cutoff[sensor_id_] > 0 ? m->sensor_cutoff[sensor_id_] : 1);
+  adr = m->sensor_adr[target_sensor_id_];
+  type = m->sensor_type[target_sensor_id_];
+  cutoff = (m->sensor_cutoff[target_sensor_id_] > 0 ? m->sensor_cutoff[target_sensor_id_] : 1);
 
-  if(m->names[m->name_sensoradr[sensor_id_]])
+  if(m->names[m->name_sensoradr[target_sensor_id_]])
   {
-    sensor_name = mj_id2name(m, mjOBJ_SENSOR, sensor_id_);
+    sensor_name = mj_id2name(m, mjOBJ_SENSOR, target_sensor_id_);
   }
   else
   {

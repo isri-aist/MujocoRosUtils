@@ -117,7 +117,12 @@ protected:
       \param sensor_id sensor ID
       \param topic_name topic name
    */
-  SensorPublisher(const mjModel * m, mjData * d, int sensor_id, std::string sensor_name, std::string topic_name);
+  SensorPublisher(const mjModel * m,
+                  mjData * d,
+                  int sensor_id,
+                  int target_sensor_id,
+                  std::string sensor_name,
+                  std::string topic_name);
 
   /** \brief initSensors.
     \param model model
@@ -129,6 +134,9 @@ protected:
 protected:
   //! Sensor ID
   int sensor_id_ = -1;
+
+  //! Target Sensor ID
+  int target_sensor_id_ = -1;
 
   //! Sensor name
   std::string sensor_name_ = "";
@@ -191,42 +199,6 @@ protected:
                                                     {mjSENS_SUBTREECOM, "subtreecom"},
                                                     {mjSENS_SUBTREELINVEL, "subtreelinvel"},
                                                     {mjSENS_SUBTREEANGMOM, "subtreeangmom"}};
-  // const std::map<std::string , int> SENSOR_STRING = {{"touch",mjSENS_TOUCH},
-  //                                                   {"accelerometer",mjSENS_ACCELEROMETER},
-  //                                                   {"velocimeter",mjSENS_VELOCIMETER},
-  //                                                   {"gyro",mjSENS_GYRO},
-  //                                                   {"force",mjSENS_FORCE},
-  //                                                   {"torque",mjSENS_TORQUE},
-  //                                                   {"magnetometer",mjSENS_MAGNETOMETER},
-  //                                                   {"rangefinder",mjSENS_RANGEFINDER},
-  //                                                   {"jointpos",mjSENS_JOINTPOS},
-  //                                                   {"jointvel",mjSENS_JOINTVEL},
-  //                                                   {"tendonpos",mjSENS_TENDONPOS},
-  //                                                   {"tendonvel",mjSENS_TENDONVEL},
-  //                                                   {"actuatorpos",mjSENS_ACTUATORPOS},
-  //                                                   {"actuatorvel",mjSENS_ACTUATORVEL},
-  //                                                   {"actuatorfrc",mjSENS_ACTUATORFRC},
-  //                                                   {"jointactfrc",mjSENS_JOINTACTFRC},
-  //                                                   {"ballquat",mjSENS_BALLQUAT},
-  //                                                   { "ballangvel",mjSENS_BALLANGVEL},
-  //                                                   {"jointlimitpos",mjSENS_JOINTLIMITPOS},
-  //                                                   {"jointlimitvel",mjSENS_JOINTLIMITVEL},
-  //                                                   {"jointlimitfrc",mjSENS_JOINTLIMITFRC},
-  //                                                   {"tendonlimitpos",mjSENS_TENDONLIMITPOS},
-  //                                                   {"tendonlimitvel",mjSENS_TENDONLIMITVEL},
-  //                                                   {"tendonlimitfrc",mjSENS_TENDONLIMITFRC},
-  //                                                   {"framepos",mjSENS_FRAMEPOS},
-  //                                                   {"framequat",mjSENS_FRAMEQUAT},
-  //                                                   {"framexaxis",mjSENS_FRAMEXAXIS},
-  //                                                   {"frameyaxis",mjSENS_FRAMEYAXIS},
-  //                                                   {"framezaxis",mjSENS_FRAMEZAXIS},
-  //                                                   {"framelinvel",mjSENS_FRAMELINVEL},
-  //                                                   {"frameangvel",mjSENS_FRAMEANGVEL},
-  //                                                   {"framelinacc",mjSENS_FRAMELINACC},
-  //                                                   {"frameangacc",mjSENS_FRAMEANGACC},
-  //                                                   {"subtreecom",mjSENS_SUBTREECOM},
-  //                                                   {"subtreelinvel",mjSENS_SUBTREELINVEL},
-  //                                                   {"subtreeangmom",mjSENS_SUBTREEANGMOM}};
 };
 
 } // namespace MujocoRosUtils
