@@ -1,25 +1,25 @@
 #pragma once
 
-#include <ros/ros.h>
-#include <std_msgs/String.h>
 #include <geometry_msgs/PointStamped.h>
 #include <geometry_msgs/QuaternionStamped.h>
 #include <geometry_msgs/Vector3Stamped.h>
-#include <mujoco_ros_utils/ScalarStamped.h>
+#include <ros/ros.h>
+#include <std_msgs/String.h>
 
 #include <mujoco/mjdata.h>
 #include <mujoco/mjmodel.h>
 #include <mujoco/mjtnum.h>
 #include <mujoco/mjvisualize.h>
 
-#include <iostream>
 #include <algorithm>
 #include <cstring>
+#include <iostream>
+#include <map>
+#include <memory>
+#include <mujoco_ros_utils/ScalarStamped.h>
 #include <sstream>
 #include <string>
 #include <vector>
-#include <memory>
-#include <map>
 
 namespace MujocoRosUtils
 {
@@ -117,36 +117,24 @@ protected:
       \param sensor_id sensor ID
       \param topic_name topic name
    */
-  SensorPublisher(const mjModel * m,
-                             mjData *d,
-                             int sensor_id,
-                            std::string topic_name);
+  SensorPublisher(const mjModel * m, mjData * d, int sensor_id, std::string sensor_name, std::string topic_name);
 
   /** \brief initSensors.
     \param model model
     \param d data
     \param sensor_id sensor ID
   */
-  void initSensors(const mjModel * model,std::string topic_name);
+  void initSensors(const mjModel * model, std::string topic_name);
 
 protected:
   //! Sensor ID
   int sensor_id_ = -1;
 
+  //! Sensor name
+  std::string sensor_name_ = "";
+
   //! Site ID
   int site_id_ = -1;
-
-  //! Total number of sensors
-  int sensor_total_num_;
-
-  //! Sensor interval
-  mjtNum sensor_interval_;
-
-  //! Sensor surface type
-  SurfaceType surface_type_;
-
-  //! Sensor grid type
-  GridType grid_type_;
 
   //! List of sensor positions in the site frame
   mjtNum * sensor_pos_list_;
@@ -167,46 +155,78 @@ protected:
   std::map<std::string, std::pair<ros::Publisher, std::string>> sensor_map_;
 
   //! Sensor name
-  const std::map<int,std::string> SENSOR_STRING = 
-  {
-    {mjSENS_TOUCH          ,"touch"},
-    {mjSENS_ACCELEROMETER  ,"accelerometer"},
-    {mjSENS_VELOCIMETER    ,"velocimeter"},
-    {mjSENS_GYRO           ,"gyro"},
-    {mjSENS_FORCE          ,"force"},
-    {mjSENS_TORQUE         ,"torque"},
-    {mjSENS_MAGNETOMETER   ,"magnetometer"},
-    {mjSENS_RANGEFINDER    ,"rangefinder"},
-    {mjSENS_JOINTPOS       ,"jointpos"},
-    {mjSENS_JOINTVEL       ,"jointvel"},
-    {mjSENS_TENDONPOS      ,"tendonpos"},
-    {mjSENS_TENDONVEL      ,"tendonvel"},
-    {mjSENS_ACTUATORPOS    ,"actuatorpos"},
-    {mjSENS_ACTUATORVEL    ,"actuatorvel"},
-    {mjSENS_ACTUATORFRC    ,"actuatorfrc"},
-    {mjSENS_JOINTACTFRC    ,"jointactfrc"},
-    {mjSENS_BALLQUAT       ,"ballquat"},
-    {mjSENS_BALLANGVEL     ,"ballangvel"},
-    {mjSENS_JOINTLIMITPOS  ,"jointlimitpos"},
-    {mjSENS_JOINTLIMITVEL  ,"jointlimitvel"},
-    {mjSENS_JOINTLIMITFRC  ,"jointlimitfrc"},
-    {mjSENS_TENDONLIMITPOS ,"tendonlimitpos"},
-    {mjSENS_TENDONLIMITVEL ,"tendonlimitvel"},
-    {mjSENS_TENDONLIMITFRC ,"tendonlimitfrc"},
-    {mjSENS_FRAMEPOS       ,"framepos"},
-    {mjSENS_FRAMEQUAT      ,"framequat"},
-    {mjSENS_FRAMEXAXIS     ,"framexaxis"},
-    {mjSENS_FRAMEYAXIS     ,"frameyaxis"},
-    {mjSENS_FRAMEZAXIS     ,"framezaxis"},
-    {mjSENS_FRAMELINVEL    ,"framelinvel"},
-    {mjSENS_FRAMEANGVEL    ,"frameangvel"},
-    {mjSENS_FRAMELINACC    ,"framelinacc"},
-    {mjSENS_FRAMEANGACC    ,"frameangacc"},
-    {mjSENS_SUBTREECOM     ,"subtreecom"},
-    {mjSENS_SUBTREELINVEL  ,"subtreelinvel"},
-    {mjSENS_SUBTREEANGMOM  ,"subtreeangmom"}
-  };
-
+  const std::map<int, std::string> SENSOR_STRING = {{mjSENS_TOUCH, "touch"},
+                                                    {mjSENS_ACCELEROMETER, "accelerometer"},
+                                                    {mjSENS_VELOCIMETER, "velocimeter"},
+                                                    {mjSENS_GYRO, "gyro"},
+                                                    {mjSENS_FORCE, "force"},
+                                                    {mjSENS_TORQUE, "torque"},
+                                                    {mjSENS_MAGNETOMETER, "magnetometer"},
+                                                    {mjSENS_RANGEFINDER, "rangefinder"},
+                                                    {mjSENS_JOINTPOS, "jointpos"},
+                                                    {mjSENS_JOINTVEL, "jointvel"},
+                                                    {mjSENS_TENDONPOS, "tendonpos"},
+                                                    {mjSENS_TENDONVEL, "tendonvel"},
+                                                    {mjSENS_ACTUATORPOS, "actuatorpos"},
+                                                    {mjSENS_ACTUATORVEL, "actuatorvel"},
+                                                    {mjSENS_ACTUATORFRC, "actuatorfrc"},
+                                                    {mjSENS_JOINTACTFRC, "jointactfrc"},
+                                                    {mjSENS_BALLQUAT, "ballquat"},
+                                                    {mjSENS_BALLANGVEL, "ballangvel"},
+                                                    {mjSENS_JOINTLIMITPOS, "jointlimitpos"},
+                                                    {mjSENS_JOINTLIMITVEL, "jointlimitvel"},
+                                                    {mjSENS_JOINTLIMITFRC, "jointlimitfrc"},
+                                                    {mjSENS_TENDONLIMITPOS, "tendonlimitpos"},
+                                                    {mjSENS_TENDONLIMITVEL, "tendonlimitvel"},
+                                                    {mjSENS_TENDONLIMITFRC, "tendonlimitfrc"},
+                                                    {mjSENS_FRAMEPOS, "framepos"},
+                                                    {mjSENS_FRAMEQUAT, "framequat"},
+                                                    {mjSENS_FRAMEXAXIS, "framexaxis"},
+                                                    {mjSENS_FRAMEYAXIS, "frameyaxis"},
+                                                    {mjSENS_FRAMEZAXIS, "framezaxis"},
+                                                    {mjSENS_FRAMELINVEL, "framelinvel"},
+                                                    {mjSENS_FRAMEANGVEL, "frameangvel"},
+                                                    {mjSENS_FRAMELINACC, "framelinacc"},
+                                                    {mjSENS_FRAMEANGACC, "frameangacc"},
+                                                    {mjSENS_SUBTREECOM, "subtreecom"},
+                                                    {mjSENS_SUBTREELINVEL, "subtreelinvel"},
+                                                    {mjSENS_SUBTREEANGMOM, "subtreeangmom"}};
+  // const std::map<std::string , int> SENSOR_STRING = {{"touch",mjSENS_TOUCH},
+  //                                                   {"accelerometer",mjSENS_ACCELEROMETER},
+  //                                                   {"velocimeter",mjSENS_VELOCIMETER},
+  //                                                   {"gyro",mjSENS_GYRO},
+  //                                                   {"force",mjSENS_FORCE},
+  //                                                   {"torque",mjSENS_TORQUE},
+  //                                                   {"magnetometer",mjSENS_MAGNETOMETER},
+  //                                                   {"rangefinder",mjSENS_RANGEFINDER},
+  //                                                   {"jointpos",mjSENS_JOINTPOS},
+  //                                                   {"jointvel",mjSENS_JOINTVEL},
+  //                                                   {"tendonpos",mjSENS_TENDONPOS},
+  //                                                   {"tendonvel",mjSENS_TENDONVEL},
+  //                                                   {"actuatorpos",mjSENS_ACTUATORPOS},
+  //                                                   {"actuatorvel",mjSENS_ACTUATORVEL},
+  //                                                   {"actuatorfrc",mjSENS_ACTUATORFRC},
+  //                                                   {"jointactfrc",mjSENS_JOINTACTFRC},
+  //                                                   {"ballquat",mjSENS_BALLQUAT},
+  //                                                   { "ballangvel",mjSENS_BALLANGVEL},
+  //                                                   {"jointlimitpos",mjSENS_JOINTLIMITPOS},
+  //                                                   {"jointlimitvel",mjSENS_JOINTLIMITVEL},
+  //                                                   {"jointlimitfrc",mjSENS_JOINTLIMITFRC},
+  //                                                   {"tendonlimitpos",mjSENS_TENDONLIMITPOS},
+  //                                                   {"tendonlimitvel",mjSENS_TENDONLIMITVEL},
+  //                                                   {"tendonlimitfrc",mjSENS_TENDONLIMITFRC},
+  //                                                   {"framepos",mjSENS_FRAMEPOS},
+  //                                                   {"framequat",mjSENS_FRAMEQUAT},
+  //                                                   {"framexaxis",mjSENS_FRAMEXAXIS},
+  //                                                   {"frameyaxis",mjSENS_FRAMEYAXIS},
+  //                                                   {"framezaxis",mjSENS_FRAMEZAXIS},
+  //                                                   {"framelinvel",mjSENS_FRAMELINVEL},
+  //                                                   {"frameangvel",mjSENS_FRAMEANGVEL},
+  //                                                   {"framelinacc",mjSENS_FRAMELINACC},
+  //                                                   {"frameangacc",mjSENS_FRAMEANGACC},
+  //                                                   {"subtreecom",mjSENS_SUBTREECOM},
+  //                                                   {"subtreelinvel",mjSENS_SUBTREELINVEL},
+  //                                                   {"subtreeangmom",mjSENS_SUBTREEANGMOM}};
 };
 
-} // namespace mujoco::plugin::sensor
+} // namespace MujocoRosUtils
