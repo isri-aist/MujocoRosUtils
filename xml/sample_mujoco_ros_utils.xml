@@ -7,6 +7,7 @@
     <plugin plugin="MujocoRosUtils::ImagePublisher"/>
     <plugin plugin="MujocoRosUtils::ActuatorCommand"/>
     <plugin plugin="MujocoRosUtils::ExternalForce"/>
+    <plugin plugin="MujocoRosUtils::SensorPublisher"/>
   </extension>
 
   <asset>
@@ -18,6 +19,7 @@
     <headlight ambient="0.7 0.7 0.7" diffuse="0.2 0.2 0.2" specular="0.1 0.1 0.1"/>
     <map znear="0.01"/>
     <scale contactwidth="0.02" contactheight="0.5"/>
+    <rgba rangefinder="1 1 0.1 0.1"/>
   </visual>
 
   <statistic center="0 0 1" extent="1" meansize="0.1"/>
@@ -37,6 +39,7 @@
     <body name="object" pos="0 0 1">
       <freejoint/>
       <geom type="box" size="0.2 0.2 0.1" mass="0.1" rgba="0.5 1.0 0.5 1.0"/>
+      <site name="box_sensor" type="capsule" size=".005 .1" group="4" fromto=".0 .0 -0.05 .0 0 .0"/>
       <plugin plugin="MujocoRosUtils::ExternalForce">
         <config key="topic_name" value="/external_force"/>
         <config key="vis_scale" value="0.1"/>
@@ -92,6 +95,13 @@
       <config key="info_topic_name" value="/image/camera_info"/>
       <config key="height" value="240"/>
       <config key="width" value="320"/>
+      <config key="publish_rate" value="30"/>
+    </plugin>
+
+    <rangefinder name="box_sensor" site="box_sensor"/>
+    <plugin name="sensor_publisher" plugin="MujocoRosUtils::SensorPublisher" objtype="xbody" objname="object">
+      <config key="sensor_name" value="box_sensor"/>
+      <config key="topic_name" value="/rangefinder"/>
       <config key="publish_rate" value="30"/>
     </plugin>
   </sensor>

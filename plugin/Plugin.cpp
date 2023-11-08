@@ -5,6 +5,7 @@
 #include "ExternalForce.h"
 #include "ImagePublisher.h"
 #include "PosePublisher.h"
+#include "SensorPublisher.h"
 
 namespace MujocoRosUtils
 {
@@ -16,6 +17,7 @@ mjPLUGIN_LIB_INIT
   ImagePublisher::RegisterPlugin();
   ActuatorCommand::RegisterPlugin();
   ExternalForce::RegisterPlugin();
+  SensorPublisher::RegisterPlugin();
 }
 
 } // namespace MujocoRosUtils

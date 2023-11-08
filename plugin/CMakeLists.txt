@@ -1,6 +1,6 @@
 add_library(
   MujocoRosUtils SHARED ClockPublisher.cpp PosePublisher.cpp ImagePublisher.cpp
-                        ActuatorCommand.cpp ExternalForce.cpp)
+                        ActuatorCommand.cpp ExternalForce.cpp SensorPublisher.cpp)
 
 target_include_directories(MujocoRosUtils PRIVATE ${MUJOCO_INCLUDE_DIR})
 target_include_directories(MujocoRosUtils PUBLIC ${catkin_INCLUDE_DIRS})
