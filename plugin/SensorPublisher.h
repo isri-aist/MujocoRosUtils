@@ -135,25 +135,19 @@ protected:
 
 protected:
   //! Sensor ID
-  int sensor_id_ = -1;
+  const int sensor_id_;
 
   //! Target Sensor ID
-  int target_sensor_id_ = -1;
+  const int target_sensor_id_;
 
   //! Sensor name
-  std::string sensor_name_ = "";
+  const std::string sensor_name_;
 
   //! Site ID
-  int site_id_ = -1;
-
-  //! List of sensor positions in the site frame
-  mjtNum * sensor_pos_list_;
-
-  //! List of sensor normal directions in the site frame
-  mjtNum * sensor_normal_list_;
+  const int site_id_;
 
   //! Frame ID of topic
-  std::string frame_id_ = "";
+  const std::string frame_id_;
 
   //! ROS node handle
   std::shared_ptr<ros::NodeHandle> nh_;
@@ -165,10 +159,10 @@ protected:
   std::map<std::string, std::pair<ros::Publisher, std::string>> sensor_map_;
 
   //! Iteration interval to skip ROS publish
-  int publish_skip_ = 0;
+  const int publish_skip_;
 
   //! Value of `use_sim_time` rosparam
-  bool use_sim_time_ = false;
+  const bool use_sim_time_;
 
   //! Iteration count of simulation
   int sim_cnt_ = 0;

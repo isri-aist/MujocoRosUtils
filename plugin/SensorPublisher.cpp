@@ -30,8 +30,7 @@ void SensorPublisher::RegisterPlugin()
   // Can only run after forces have been computed
   plugin.needstage = mjSTAGE_ACC;
 
-  plugin.init = +[](const mjModel * m, mjData * d, int plugin_id)
-  {
+  plugin.init = +[](const mjModel * m, mjData * d, int plugin_id) {
     auto * plugin_instance = SensorPublisher::Create(m, d, plugin_id);
     if(!plugin_instance)
     {
@@ -41,22 +40,19 @@ void SensorPublisher::RegisterPlugin()
     return 0;
   };
 
-  plugin.destroy = +[](mjData * d, int plugin_id)
-  {
+  plugin.destroy = +[](mjData * d, int plugin_id) {
     delete reinterpret_cast<SensorPublisher *>(d->plugin_data[plugin_id]);
     d->plugin_data[plugin_id] = 0;
   };
 
   plugin.reset = +[](const mjModel * m, double *, // plugin_state
-                     void * plugin_data, int plugin_id)
-  {
+                     void * plugin_data, int plugin_id) {
     auto * plugin_instance = reinterpret_cast<class SensorPublisher *>(plugin_data);
     plugin_instance->reset(m, plugin_id);
   };
 
   plugin.compute = +[](const mjModel * m, mjData * d, int plugin_id, int // capability_bit
-                    )
-  {
+                    ) {
     auto * plugin_instance = reinterpret_cast<class SensorPublisher *>(d->plugin_data[plugin_id]);
     plugin_instance->compute(m, d, plugin_id);
   };
@@ -90,9 +86,9 @@ SensorPublisher * SensorPublisher::Create(const mjModel * m, mjData * d, int plu
     return nullptr;
   }
 
-  int target_sensor_id =
+  int target_sensor_id = static_cast<int>(
       std::distance(sensor_name_list.begin(),
-                    (std::find(sensor_name_list.begin(), sensor_name_list.end(), std::string(sensor_name_char))));
+                    (std::find(sensor_name_list.begin(), sensor_name_list.end(), std::string(sensor_name_char)))));
 
   // Set sensor_id
   int sensor_id = 0;
@@ -184,7 +180,6 @@ SensorPublisher::~SensorPublisher() {}
 void SensorPublisher::initSensors(const mjModel * model, std::string topic_name)
 {
   std::string sensor_name, site, frame_id;
-  int adr = model->sensor_adr[target_sensor_id_];
   int site_id = model->sensor_objid[target_sensor_id_];
   int parent_id = model->site_bodyid[site_id];
   int type = model->sensor_type[target_sensor_id_];
@@ -339,7 +334,6 @@ void SensorPublisher::compute(const mjModel * m, mjData * d, int // plugin_id
     return;
   }
 
-  mjMARKSTACK;
   ros::Publisher pub;
   std::string frame_id, sensor_name;
 
@@ -447,8 +441,6 @@ void SensorPublisher::compute(const mjModel * m, mjData * d, int // plugin_id
                 << sensor_name << " of type " << type << ")" << std::endl;
       break;
   }
-
-  mjFREESTACK;
 }
 
 } // namespace MujocoRosUtils
