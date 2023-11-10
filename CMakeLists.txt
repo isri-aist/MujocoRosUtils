@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.8)
+cmake_minimum_required(VERSION 3.10)
 
 set(PROJECT_NAME mujoco_ros_utils)
 set(PROJECT_GENERATED_HEADERS_SKIP_DEPRECATED ON)
@@ -26,6 +26,31 @@ endif()
 set(MUJOCO_INCLUDE_DIR "${MUJOCO_ROOT_DIR}/include")
 set(MUJOCO_LIB_DIR "${MUJOCO_ROOT_DIR}/lib")
 set(MUJOCO_BIN_DIR "${MUJOCO_ROOT_DIR}/bin")
+set(MUJOCO_REQUIRED_VERSION 237)
+
+set(MUJOCO_MAIN_HEADER "${MUJOCO_INCLUDE_DIR}/mujoco/mujoco.h")
+if(NOT EXISTS "${MUJOCO_MAIN_HEADER}")
+  message(
+    FATAL_ERROR
+      "MuJoCo main header (${MUJOCO_MAIN_HEADER}) not found, maybe MUJOCO_ROOT_DIR is badly set"
+  )
+endif()
+file(READ "${MUJOCO_MAIN_HEADER}" MUJOCO_MAIN_HEADER_CONTENT)
+if(MUJOCO_MAIN_HEADER_CONTENT MATCHES ".*#define mjVERSION_HEADER ([0-9]+).*")
+  set(MUJOCO_VERSION ${CMAKE_MATCH_1})
+else()
+  message(
+    FATAL_ERROR
+      "Could not extract MuJoCo version from the header, please contact this package developers"
+  )
+endif()
+if(${MUJOCO_VERSION} LESS ${MUJOCO_REQUIRED_VERSION})
+  message(
+    FATAL_ERROR
+      "This package requires at least MuJoCo version ${MUJOCO_REQUIRED_VERSION} but you have ${MUJOCO_VERSION}"
+  )
+endif()
+
 file(GLOB LIB_MUJOCO ${MUJOCO_BIN_DIR}/libmujoco[0-9][0-9][0-9].so
      ${MUJOCO_LIB_DIR}/libmujoco.so.*)
 if(EXISTS ${LIB_MUJOCO})
@@ -49,7 +74,7 @@ find_package(
              visualization_msgs
              sensor_msgs)
 
-add_message_files(FILES ExternalForce.msg)
+add_message_files(FILES ScalarStamped.msg ExternalForce.msg)
 
 generate_messages(DEPENDENCIES geometry_msgs)
 
