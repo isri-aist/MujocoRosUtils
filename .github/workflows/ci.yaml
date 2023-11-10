@@ -23,7 +23,8 @@ jobs:
         run: |
           set -e
           set -x
-          if [ "${{ matrix.os }}" == "ubuntu-20.04" ] && \
+          if [ "${{ github.repository}}" == "isri-aist/MujocoRosUtils"] &&  \
+             [ "${{ matrix.os }}" == "ubuntu-20.04" ] && \
              [ "${{ matrix.build-type }}" == "RelWithDebInfo" ]
           then
             echo "UPLOAD_DOCUMENTATION=true" >> $GITHUB_ENV
