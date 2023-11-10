@@ -30,7 +30,8 @@ void SensorPublisher::RegisterPlugin()
   // Can only run after forces have been computed
   plugin.needstage = mjSTAGE_ACC;
 
-  plugin.init = +[](const mjModel * m, mjData * d, int plugin_id) {
+  plugin.init = +[](const mjModel * m, mjData * d, int plugin_id)
+  {
     auto * plugin_instance = SensorPublisher::Create(m, d, plugin_id);
     if(!plugin_instance)
     {
@@ -40,19 +41,22 @@ void SensorPublisher::RegisterPlugin()
     return 0;
   };
 
-  plugin.destroy = +[](mjData * d, int plugin_id) {
+  plugin.destroy = +[](mjData * d, int plugin_id)
+  {
     delete reinterpret_cast<SensorPublisher *>(d->plugin_data[plugin_id]);
     d->plugin_data[plugin_id] = 0;
   };
 
   plugin.reset = +[](const mjModel * m, double *, // plugin_state
-                     void * plugin_data, int plugin_id) {
+                     void * plugin_data, int plugin_id)
+  {
     auto * plugin_instance = reinterpret_cast<class SensorPublisher *>(plugin_data);
     plugin_instance->reset(m, plugin_id);
   };
 
   plugin.compute = +[](const mjModel * m, mjData * d, int plugin_id, int // capability_bit
-                    ) {
+                    )
+  {
     auto * plugin_instance = reinterpret_cast<class SensorPublisher *>(d->plugin_data[plugin_id]);
     plugin_instance->compute(m, d, plugin_id);
   };
