@@ -16,16 +16,26 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-20.04]
-        build-type: [Debug, RelWithDebInfo]
+        build-type: [RelWithDebInfo, Debug]
+        mujoco-version: [2.3.7]
+        include:
+          - os: ubuntu-20.04
+            build-type: RelWithDebInfo
+            mujoco-version: 2.3.5 # 2.3.7
+          - os: ubuntu-20.04
+            build-type: RelWithDebInfo
+            mujoco-version: 2.3.6 # 2.3.7
     runs-on: ${{ matrix.os }}
     steps:
       - name: Setup environment variables
         run: |
           set -e
           set -x
-          if [ "${{ github.repository}}" == "isri-aist/MujocoRosUtils"] &&  \
-             [ "${{ matrix.os }}" == "ubuntu-20.04" ] && \
-             [ "${{ matrix.build-type }}" == "RelWithDebInfo" ]
+          if [ "${{ matrix.os }}" == "ubuntu-20.04" ] && \
+             [ "${{ matrix.build-type }}" == "RelWithDebInfo" ] &&  \
+             [ "${{ matrix.mujoco-version }}" == "2.3.7" ] &&  \
+             [ "${{ github.repository_owner }}" == "isri-aist" ] && \
+             [ "${{ github.ref }}" == "refs/heads/main" ]
           then
             echo "UPLOAD_DOCUMENTATION=true" >> $GITHUB_ENV
             sudo apt-get install -qq doxygen graphviz
@@ -37,13 +47,13 @@ jobs:
           set -e
           set -x
           cd ${{ github.workspace }}/.. # Note that everything under ${{ github.workspace }} is cleaned by actions/checkout.
-          wget https://github.com/deepmind/mujoco/releases/download/2.3.7/mujoco-2.3.7-linux-x86_64.tar.gz
-          tar -zxvf mujoco-2.3.7-linux-x86_64.tar.gz
+          wget https://github.com/deepmind/mujoco/releases/download/${{ matrix.mujoco-version }}/mujoco-${{ matrix.mujoco-version }}-linux-x86_64.tar.gz
+          tar -zxvf mujoco-${{ matrix.mujoco-version }}-linux-x86_64.tar.gz
       - name: Catkin build
         uses: jrl-umi3218/github-actions/build-catkin-project@master
         with:
           build-type: ${{ matrix.build-type }}
-          cmake-args: -DMUJOCO_ROOT_DIR=${{ github.workspace }}/../mujoco-2.3.7 -DINSTALL_DOCUMENTATION=${{ env.UPLOAD_DOCUMENTATION }}
+          cmake-args: -DMUJOCO_ROOT_DIR=${{ github.workspace }}/../mujoco-${{ matrix.mujoco-version }} -DINSTALL_DOCUMENTATION=${{ env.UPLOAD_DOCUMENTATION }}
           catkin-test-args: --no-deps
           build-packages: mujoco_ros_utils
           test-packages: mujoco_ros_utils
