@@ -192,6 +192,7 @@ Plugin to publish sensor data.
 
 The following attributes are required.
 - `sensor_name`: Name of sensor whose data is to be published.
+
 The following attributes are optional.
 - `frame_id`: Frame ID of message header. (Default is `map`)
 - `topic_name`: Topic name. (Default is `mujoco/<sensor name>`)
