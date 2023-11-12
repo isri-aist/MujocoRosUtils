@@ -219,7 +219,30 @@ $(function() {
 <div class="line">  &lt;/<span class="keywordtype">plugin</span>&gt;</div>
 <div class="line">&lt;/<span class="keywordtype">actuator</span>&gt;</div>
 </div><!-- fragment --><p>In the <code>plugin</code> element, you need to specify the <code>joint</code>, <code>body</code>, etc. of the actuator to be controlled. This information is not used in the plugin, but is necessary to avoid errors in MJCF parsing.</p>
-<p>The plugin itself is also added to the list of actuators, but it is a dummy actuator. The unwanted increase in the number of actuators (which also increases the dimension of <code>d-&gt;ctrl</code>) is a problem that should be solved in the future. </p>
+<p>The plugin itself is also added to the list of actuators, but it is a dummy actuator. The unwanted increase in the number of actuators (which also increases the dimension of <code>d-&gt;ctrl</code>) is a problem that should be solved in the future.</p>
+<h2><a class="el" href="classMujocoRosUtils_1_1SensorPublisher.html" title="Plugin to publish sensor data.">MujocoRosUtils::SensorPublisher</a></h2>
+<p>Plugin to publish sensor data.</p>
+<p>The following attributes are required.</p><ul>
+<li><code>sensor_name</code>: Name of sensor whose data is to be published.</li>
+</ul>
+<p>The following attributes are optional.</p><ul>
+<li><code>frame_id</code>: Frame ID of message header. (Default is <code>map</code>)</li>
+<li><code>topic_name</code>: Topic name. (Default is <code>mujoco/&lt;sensor name&gt;</code>)</li>
+<li><code>publish_rate</code>: Publish rate. (Default is 30.0 [Hz])</li>
+</ul>
+<p>An example of tags to be added to the MJCF file: </p><div class="fragment"><div class="line">&lt;<span class="keywordtype">extension</span>&gt;</div>
+<div class="line">  &lt;<span class="keywordtype">plugin</span> <span class="keyword">plugin</span>=<span class="stringliteral">&quot;MujocoRosUtils::SensorPublisher&quot;</span>/&gt;</div>
+<div class="line">&lt;/<span class="keywordtype">extension</span>&gt;</div>
+<div class="line">&lt;<span class="keywordtype">sensor</span>&gt;</div>
+<div class="line">  &lt;<span class="keywordtype">rangefinder</span> <span class="keyword">name</span>=<span class="stringliteral">&quot;box_rangefinder&quot;</span> <span class="keyword">site</span>=<span class="stringliteral">&quot;object_center&quot;</span>/&gt;</div>
+<div class="line">  &lt;<span class="keywordtype">plugin</span> <span class="keyword">name</span>=<span class="stringliteral">&quot;sensor_publisher_scalar&quot;</span> <span class="keyword">plugin</span>=<span class="stringliteral">&quot;MujocoRosUtils::SensorPublisher&quot;</span> <span class="keyword">objtype</span>=<span class="stringliteral">&quot;xbody&quot;</span> <span class="keyword">objname</span>=<span class="stringliteral">&quot;object&quot;</span>&gt;</div>
+<div class="line">    &lt;<span class="keywordtype">config</span> <span class="keyword">key</span>=<span class="stringliteral">&quot;sensor_name&quot;</span> <span class="keyword">value</span>=<span class="stringliteral">&quot;box_rangefinder&quot;</span>/&gt;</div>
+<div class="line">    &lt;<span class="keywordtype">config</span> <span class="keyword">key</span>=<span class="stringliteral">&quot;frame_id&quot;</span> <span class="keyword">value</span>=<span class="stringliteral">&quot;map&quot;</span>/&gt;</div>
+<div class="line">    &lt;<span class="keywordtype">config</span> <span class="keyword">key</span>=<span class="stringliteral">&quot;topic_name&quot;</span> <span class="keyword">value</span>=<span class="stringliteral">&quot;/box_rangefinder&quot;</span>/&gt;</div>
+<div class="line">    &lt;<span class="keywordtype">config</span> <span class="keyword">key</span>=<span class="stringliteral">&quot;publish_rate&quot;</span> <span class="keyword">value</span>=<span class="stringliteral">&quot;30&quot;</span>/&gt;</div>
+<div class="line">  &lt;/<span class="keywordtype">plugin</span>&gt;</div>
+<div class="line">&lt;/<span class="keywordtype">sensor</span>&gt;</div>
+</div><!-- fragment --><p>In the <code>plugin</code> element, you need to specify the <code>objtype</code> and <code>objname</code>. This information is not used in the plugin, but is necessary to avoid errors in MJCF parsing. </p>
 </div></div><!-- PageDoc -->
 </div><!-- contents -->
 <!-- start footer part -->
