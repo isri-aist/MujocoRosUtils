@@ -38,8 +38,8 @@
 
     <body name="object" pos="0 0 1">
       <freejoint/>
+      <site name="object_center"/>
       <geom type="box" size="0.2 0.2 0.1" mass="0.1" rgba="0.5 1.0 0.5 1.0"/>
-      <site name="box_sensor" type="capsule" size=".005 .1" group="4" fromto=".0 .0 -0.05 .0 0 .0"/>
       <plugin plugin="MujocoRosUtils::ExternalForce">
         <config key="topic_name" value="/external_force"/>
         <config key="vis_scale" value="0.1"/>
@@ -98,10 +98,27 @@
       <config key="publish_rate" value="30"/>
     </plugin>
 
-    <rangefinder name="box_sensor" site="box_sensor"/>
-    <plugin name="sensor_publisher" plugin="MujocoRosUtils::SensorPublisher" objtype="xbody" objname="object">
-      <config key="sensor_name" value="box_sensor"/>
-      <config key="topic_name" value="/rangefinder"/>
+    <rangefinder name="box_rangefinder" site="object_center"/>
+    <plugin name="sensor_publisher_scalar" plugin="MujocoRosUtils::SensorPublisher" objtype="xbody" objname="object">
+      <config key="sensor_name" value="box_rangefinder"/>
+      <config key="frame_id" value="map"/>
+      <config key="topic_name" value="/box_rangefinder"/>
+      <config key="publish_rate" value="30"/>
+    </plugin>
+
+    <framepos name="box_framepos" objtype="site" objname="object_center"/>
+    <plugin name="sensor_publisher_point" plugin="MujocoRosUtils::SensorPublisher" objtype="xbody" objname="object">
+      <config key="sensor_name" value="box_framepos"/>
+      <config key="frame_id" value="map"/>
+      <config key="topic_name" value="/box_framepos"/>
+      <config key="publish_rate" value="30"/>
+    </plugin>
+
+    <framequat name="box_framequat" objtype="site" objname="object_center"/>
+    <plugin name="sensor_publisher_quat" plugin="MujocoRosUtils::SensorPublisher" objtype="xbody" objname="object">
+      <config key="sensor_name" value="box_framequat"/>
+      <config key="frame_id" value="map"/>
+      <config key="topic_name" value="/box_framequat"/>
       <config key="publish_rate" value="30"/>
     </plugin>
   </sensor>

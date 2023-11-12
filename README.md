@@ -186,3 +186,31 @@ In the `plugin` element, you need to specify the `joint`, `body`, etc. of the ac
 This information is not used in the plugin, but is necessary to avoid errors in MJCF parsing.
 
 The plugin itself is also added to the list of actuators, but it is a dummy actuator. The unwanted increase in the number of actuators (which also increases the dimension of `d->ctrl`) is a problem that should be solved in the future.
+
+### MujocoRosUtils::SensorPublisher
+Plugin to publish sensor data.
+
+The following attributes are required.
+- `sensor_name`: Name of sensor whose data is to be published.
+The following attributes are optional.
+- `frame_id`: Frame ID of message header. (Default is `map`)
+- `topic_name`: Topic name. (Default is `mujoco/<sensor name>`)
+- `publish_rate`: Publish rate. (Default is 30.0 [Hz])
+
+An example of tags to be added to the MJCF file:
+```xml
+<extension>
+  <plugin plugin="MujocoRosUtils::SensorPublisher"/>
+</extension>
+<sensor>
+  <rangefinder name="box_rangefinder" site="object_center"/>
+  <plugin name="sensor_publisher_scalar" plugin="MujocoRosUtils::SensorPublisher" objtype="xbody" objname="object">
+    <config key="sensor_name" value="box_rangefinder"/>
+    <config key="frame_id" value="map"/>
+    <config key="topic_name" value="/box_rangefinder"/>
+    <config key="publish_rate" value="30"/>
+  </plugin>
+</sensor>
+```
+In the `plugin` element, you need to specify the `objtype` and `objname`.
+This information is not used in the plugin, but is necessary to avoid errors in MJCF parsing.
