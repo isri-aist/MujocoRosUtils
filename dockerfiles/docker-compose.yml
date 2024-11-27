@@ -1,0 +1,23 @@
+version: '3.3'
+
+services:
+  mujoco_ros_utils:
+    image: mujoco_ros_utils:humble
+    user: root
+    container_name: mujoco_ros_utils
+    build:
+      context: ..
+      dockerfile: ./dockerfiles/Dockerfile
+    volumes:
+      - "../:/root/catkin_ws/src/mujoco_ros_utils/"
+      - "/tmp/.X11-unix:/tmp/.X11-unix:rw"
+      - "/tmp/.docker.xauth:/tmp/.docker.xauth"
+    environment:
+      - "DISPLAY=$DISPLAY"
+      - "XAUTHORITY=/tmp/.docker.xauth"
+      - "QT_X11_NO_MITSHM=1"
+    privileged: True
+    tty: True
+    stdin_open: True
+    network_mode: host
+    command: bash
