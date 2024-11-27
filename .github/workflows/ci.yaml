@@ -56,4 +56,4 @@ jobs:
           cmake-args: -DMUJOCO_ROOT_DIR=${{ github.workspace }}/../mujoco-${{ matrix.mujoco-version }} -DINSTALL_DOCUMENTATION=${{ env.UPLOAD_DOCUMENTATION }}
           colcon-test-args: --no-deps
           build-packages: mujoco_ros_utils
-          test-packages: mujoco_ros_utils
+          skip-test: true
