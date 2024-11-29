@@ -15,7 +15,7 @@ https://github.com/isri-aist/MujocoRosUtils/assets/6636600/6cc3bc6c-113d-4a1d-97
 
 ### Requirements
 - Compiler supporting C++17
-- Tested with `Ubuntu 20.04 / ROS Noetic`
+- Tested with `Ubuntu 22.04 / ROS Humble`
 
 ### Dependencies
 - [MuJoCo](https://github.com/deepmind/mujoco) (>= 2.3.5)
@@ -33,8 +33,7 @@ $ source /opt/ros/${ROS_DISTRO}/setup.bash
 $ rosdep install -y -r --from-paths src --ignore-src
 # Build a package.
 $ catkin init
-$ catkin config --extend /opt/ros/${ROS_DISTRO}
-$ catkin build mujoco_ros_utils -DCMAKE_BUILD_TYPE=RelWithDebInfo -DMUJOCO_ROOT_DIR=<absolute path to MuJoCo>
+$ colcon build mujoco_ros_utils -DCMAKE_BUILD_TYPE=RelWithDebInfo -DMUJOCO_ROOT_DIR=<absolute path to MuJoCo>
 ```
 `<absolute path to MuJoCo>` is the path to the root directory of MuJoCo.
 For example, `${HOME}/.mujoco/mujoco-2.3.5` if you installed MuJoCo from release, or `${HOME}/src/mujoco` if you installed it from source.
@@ -45,7 +44,7 @@ Add `source ${HOME}/ros/ws_mujoco/devel/setup.bash` to `${HOME}/.bashrc`.
 Assume that MuJoCo is installed in `${HOME}/.mujoco/mujoco-2.3.5` from release, and the path to the catkin workspace is `${HOME}/ros/ws_mujoco`.
 ```bash
 # Terminal 1
-$ cp ${HOME}/ros/ws_mujoco/devel/lib/libMujocoRosUtilsPlugin.so ${HOME}/.mujoco/mujoco-2.3.5/bin/mujoco_plugin
+$ cp ${HOME}/ros/ws_mujoco/install/lib/libMujocoRosUtilsPlugin.so ${HOME}/.mujoco/mujoco-2.3.5/bin/mujoco_plugin
 $ cd ${HOME}/.mujoco/mujoco-2.3.5/bin
 $ ./simulate `rospack find mujoco_ros_utils`/xml/sample_mujoco_ros_utils.xml
 # Terminal 2

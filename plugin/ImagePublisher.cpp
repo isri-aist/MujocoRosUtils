@@ -1,8 +1,5 @@
 #include "ImagePublisher.h"
 
-#include <sensor_msgs/CameraInfo.h>
-#include <sensor_msgs/Image.h>
-
 #include <mujoco/mujoco.h>
 
 #include <iostream>
@@ -251,15 +248,16 @@ ImagePublisher::ImagePublisher(const mjModel * m,
   // Init ROS
   int argc = 0;
   char ** argv = nullptr;
-  if(!ros::isInitialized())
+  if (!rclcpp::ok()) 
   {
-    ros::init(argc, argv, "mujoco_ros", ros::init_options::NoSigintHandler);
+      rclcpp::init(argc, argv);
   }
+  rclcpp::NodeOptions node_options;
 
-  nh_ = std::make_shared<ros::NodeHandle>();
-  color_pub_ = nh_->advertise<sensor_msgs::Image>(color_topic_name, 1);
-  depth_pub_ = nh_->advertise<sensor_msgs::Image>(depth_topic_name, 1);
-  info_pub_ = nh_->advertise<sensor_msgs::CameraInfo>(info_topic_name, 1);
+  nh_ = rclcpp::Node::make_shared("mujoco_ros", node_options);
+  color_pub_ = nh_->create_publisher<sensor_msgs::msg::Image>(color_topic_name, 1);
+  depth_pub_ = nh_->create_publisher<sensor_msgs::msg::Image>(depth_topic_name, 1);
+  info_pub_ = nh_->create_publisher<sensor_msgs::msg::CameraInfo>(info_topic_name, 1);
 }
 
 void ImagePublisher::reset(const mjModel *, // m
@@ -313,9 +311,9 @@ void ImagePublisher::compute(const mjModel * m, mjData * d, int // plugin_id
   }
 
   // Publish topic
-  ros::Time stamp_now = ros::Time::now();
+  rclcpp::Time stamp_now = nh_->get_clock()->now();
 
-  sensor_msgs::Image color_msg;
+  sensor_msgs::msg::Image color_msg;
   color_msg.header.stamp = stamp_now;
   color_msg.header.frame_id = frame_id_;
   color_msg.height = viewport_.height;
@@ -326,9 +324,9 @@ void ImagePublisher::compute(const mjModel * m, mjData * d, int // plugin_id
   color_msg.data.resize(sizeof(unsigned char) * 3 * viewport_.width * viewport_.height);
   std::memcpy(&color_msg.data[0], color_buffer_flipped_,
               sizeof(unsigned char) * 3 * viewport_.width * viewport_.height);
-  color_pub_.publish(color_msg);
+  color_pub_->publish(color_msg);
 
-  sensor_msgs::Image depth_msg;
+  sensor_msgs::msg::Image depth_msg;
   depth_msg.header.stamp = stamp_now;
   depth_msg.header.frame_id = frame_id_;
   depth_msg.height = viewport_.height;
@@ -338,25 +336,25 @@ void ImagePublisher::compute(const mjModel * m, mjData * d, int // plugin_id
   depth_msg.step = static_cast<unsigned int>(sizeof(float) * viewport_.width);
   depth_msg.data.resize(sizeof(float) * viewport_.width * viewport_.height);
   std::memcpy(&depth_msg.data[0], depth_buffer_flipped_, sizeof(float) * viewport_.width * viewport_.height);
-  depth_pub_.publish(depth_msg);
+  depth_pub_->publish(depth_msg);
 
-  sensor_msgs::CameraInfo info_msg;
+  sensor_msgs::msg::CameraInfo info_msg;
   info_msg.header.stamp = stamp_now;
   info_msg.header.frame_id = frame_id_;
   info_msg.height = viewport_.height;
   info_msg.width = viewport_.width;
   info_msg.distortion_model = "plumb_bob";
-  info_msg.D.resize(5, 0.0);
-  info_msg.K.fill(0.0);
-  info_msg.R.fill(0.0);
-  info_msg.P.fill(0.0);
+  info_msg.d.resize(5, 0.0);
+  info_msg.k.fill(0.0);
+  info_msg.r.fill(0.0);
+  info_msg.p.fill(0.0);
   double focal_scaling = (1.0 / std::tan((m->cam_fovy[camera_id_] * M_PI / 180.0) / 2.0)) * viewport_.height / 2.0;
-  info_msg.K[0] = info_msg.P[0] = focal_scaling;
-  info_msg.K[2] = info_msg.P[2] = static_cast<double>(viewport_.width) / 2.0;
-  info_msg.K[4] = info_msg.P[5] = focal_scaling;
-  info_msg.K[5] = info_msg.P[6] = static_cast<double>(viewport_.height) / 2.0;
-  info_msg.K[8] = info_msg.P[10] = 1.0;
-  info_pub_.publish(info_msg);
+  info_msg.k[0] = info_msg.p[0] = focal_scaling;
+  info_msg.k[2] = info_msg.p[2] = static_cast<double>(viewport_.width) / 2.0;
+  info_msg.k[4] = info_msg.p[5] = focal_scaling;
+  info_msg.k[5] = info_msg.p[6] = static_cast<double>(viewport_.height) / 2.0;
+  info_msg.k[8] = info_msg.p[10] = 1.0;
+  info_pub_->publish(info_msg);
 }
 
 void ImagePublisher::free()

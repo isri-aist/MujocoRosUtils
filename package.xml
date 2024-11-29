@@ -14,10 +14,8 @@
   <buildtool_depend>rosidl_default_generators</buildtool_depend>
 
   <depend>libglfw3-dev</depend>
-  <depend>roscpp</depend>
   <depend>tf2_ros</depend>
   <depend>std_msgs</depend>
-  <depend>std_srvs</depend>
   <depend>geometry_msgs</depend>
   <depend>visualization_msgs</depend>
   <depend>sensor_msgs</depend>

@@ -117,15 +117,17 @@ ActuatorCommand::ActuatorCommand(const mjModel * m,
 
   int argc = 0;
   char ** argv = nullptr;
-  if(!ros::isInitialized())
+  if (!rclcpp::ok()) 
   {
-    ros::init(argc, argv, "mujoco_ros", ros::init_options::NoSigintHandler);
+      rclcpp::init(argc, argv);
   }
+  rclcpp::NodeOptions node_options;
 
-  nh_ = std::make_shared<ros::NodeHandle>();
+  nh_ = rclcpp::Node::make_shared("mujoco_ros", node_options);
+  sub_ = nh_->create_subscription<std_msgs::msg::Float64>(
+    topic_name, 1, std::bind(&ActuatorCommand::callback, this, std::placeholders::_1));
   // Use a dedicated queue so as not to call callbacks of other modules
-  nh_->setCallbackQueue(&callbackQueue_);
-  sub_ = nh_->subscribe<std_msgs::Float64>(topic_name, 1, &ActuatorCommand::callback, this);
+  executor_.add_node(nh_);
 }
 
 void ActuatorCommand::reset(const mjModel *, // m
@@ -140,7 +142,7 @@ void ActuatorCommand::compute(const mjModel *, // m
 )
 {
   // Call ROS callback
-  callbackQueue_.callAvailable(ros::WallDuration());
+  executor_.spin_once(std::chrono::seconds(0));
 
   // Set actuator command
   if(!std::isnan(ctrl_))
@@ -150,7 +152,7 @@ void ActuatorCommand::compute(const mjModel *, // m
   }
 }
 
-void ActuatorCommand::callback(const std_msgs::Float64::ConstPtr & msg)
+void ActuatorCommand::callback(const std_msgs::msg::Float64::SharedPtr msg)
 {
   ctrl_ = msg->data;
 }

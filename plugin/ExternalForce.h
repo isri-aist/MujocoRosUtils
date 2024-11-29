@@ -1,14 +1,13 @@
 #pragma once
 
-#include <ros/callback_queue.h>
-#include <ros/ros.h>
+#include <rclcpp/rclcpp.hpp>
 
 #include <mujoco/mjdata.h>
 #include <mujoco/mjmodel.h>
 #include <mujoco/mjtnum.h>
 #include <mujoco/mjvisualize.h>
 
-#include <mujoco_ros_utils/ExternalForce.h>
+#include <mujoco_ros_utils/msg/external_force.hpp>
 #include <string>
 
 namespace MujocoRosUtils
@@ -67,17 +66,17 @@ protected:
   /** \brief Constructor.
       \param msg external force message
   */
-  void callback(const mujoco_ros_utils::ExternalForce::ConstPtr & msg);
+  void callback(const mujoco_ros_utils::msg::ExternalForce::SharedPtr msg);
 
 protected:
   //! ROS node handle
-  std::shared_ptr<ros::NodeHandle> nh_;
+  rclcpp::Node::SharedPtr nh_;
 
   //! ROS callback queue
-  ros::CallbackQueue callbackQueue_;
+  rclcpp::executors::SingleThreadedExecutor executor_;
 
   //! ROS publisher for external force
-  ros::Subscriber sub_;
+  rclcpp::Subscription<mujoco_ros_utils::msg::ExternalForce>::SharedPtr sub_;
 
   //! Body ID
   int body_id_ = -1;
@@ -86,7 +85,7 @@ protected:
   std::string topic_name_;
 
   //! External force message
-  std::shared_ptr<mujoco_ros_utils::ExternalForce> msg_;
+  std::shared_ptr<mujoco_ros_utils::msg::ExternalForce> msg_;
 
   //! End time to apply external force (-1 if no external force is applied)
   mjtNum end_time_ = -1;
