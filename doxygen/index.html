@@ -108,6 +108,7 @@ $(function() {
 <p>Add <code>source ${HOME}/ros/ws_mujoco/devel/setup.bash</code> to <code>${HOME}/.bashrc</code>.</p>
 <h1>Examples</h1>
 <p>Assume that MuJoCo is installed in <code>${HOME}/.mujoco/mujoco-2.3.5</code> from release, and the path to the catkin workspace is <code>${HOME}/ros/ws_mujoco</code>. </p><div class="fragment"><div class="line"># Terminal 1</div>
+<div class="line">$ cp ${HOME}/ros/ws_mujoco/devel/lib/libMujocoRosUtils.so ${HOME}/.mujoco/mujoco-2.3.5/bin/mujoco_plugin</div>
 <div class="line">$ cp ${HOME}/ros/ws_mujoco/devel/lib/libMujocoRosUtilsPlugin.so ${HOME}/.mujoco/mujoco-2.3.5/bin/mujoco_plugin</div>
 <div class="line">$ cd ${HOME}/.mujoco/mujoco-2.3.5/bin</div>
 <div class="line">$ ./simulate `rospack find mujoco_ros_utils`/xml/sample_mujoco_ros_utils.xml</div>
