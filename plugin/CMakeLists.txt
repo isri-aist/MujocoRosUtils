@@ -12,3 +12,6 @@ add_dependencies(MujocoRosUtils ${${PROJECT_NAME}_EXPORTED_TARGETS})
 add_library(MujocoRosUtilsPlugin SHARED Plugin.cpp)
 target_include_directories(MujocoRosUtilsPlugin PRIVATE ${MUJOCO_INCLUDE_DIR})
 target_link_libraries(MujocoRosUtilsPlugin PUBLIC MujocoRosUtils)
+
+install(TARGETS MujocoRosUtils MujocoRosUtilsPlugin
+  DESTINATION ${MUJOCO_BIN_DIR}/mujoco_plugin)
