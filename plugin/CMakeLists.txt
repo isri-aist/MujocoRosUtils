@@ -14,4 +14,4 @@ target_include_directories(MujocoRosUtilsPlugin PRIVATE ${MUJOCO_INCLUDE_DIR})
 target_link_libraries(MujocoRosUtilsPlugin PUBLIC MujocoRosUtils)
 
 install(TARGETS MujocoRosUtils MujocoRosUtilsPlugin
-  DESTINATION ${MUJOCO_BIN_DIR}/mujoco_plugin)
+        DESTINATION ${MUJOCO_BIN_DIR}/mujoco_plugin)
