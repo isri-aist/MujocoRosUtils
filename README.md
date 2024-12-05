@@ -44,7 +44,6 @@ Add `source ${HOME}/ros/ws_mujoco/devel/setup.bash` to `${HOME}/.bashrc`.
 Assume that MuJoCo is installed in `${HOME}/.mujoco/mujoco-2.3.5` from release, and the path to the catkin workspace is `${HOME}/ros/ws_mujoco`.
 ```bash
 # Terminal 1
-$ cp ${HOME}/ros/ws_mujoco/install/lib/libMujocoRosUtilsPlugin.so ${HOME}/.mujoco/mujoco-2.3.5/bin/mujoco_plugin
 $ cd ${HOME}/.mujoco/mujoco-2.3.5/bin
 $ ./simulate `rospack find mujoco_ros_utils`/xml/sample_mujoco_ros_utils.xml
 # Terminal 2
