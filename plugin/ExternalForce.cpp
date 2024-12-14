@@ -206,7 +206,11 @@ void ExternalForce::visualize(const mjModel *, // m
     return;
   }
 
-  mjMARKSTACK;
+  #if mjVERSION_HEADER >= 300
+    mj_markStack(d);
+  #else
+    mjMARKSTACK;
+  #endif
 
   mjtNum pos_local[3];
   pos_local[0] = msg_->pos.x;
@@ -233,7 +237,11 @@ void ExternalForce::visualize(const mjModel *, // m
   force_geom->segid = scn->ngeom;
   scn->ngeom++;
 
-  mjFREESTACK;
+  #if mjVERSION_HEADER >= 300
+    mj_freeStack(d);
+  #else
+    mjFREESTACK;
+  #endif
 }
 
 void ExternalForce::callback(const mujoco_ros_utils::msg::ExternalForce::SharedPtr msg)
