@@ -42,7 +42,7 @@ def launch_setup(context, *args, **kwargs):
                         ('rgb/camera_info', '/image/camera_info'),
                         ('rgb/image_rect_color', '/image/color'),
                         ('depth_registered/image_rect', '/image/depth'),
-                        ('depth_registered/points', '/points'),
+                        ('points', '/image/points')
                     ],
                 ),
             ],

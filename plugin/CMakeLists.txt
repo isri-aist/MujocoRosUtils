@@ -27,7 +27,10 @@ install(
   ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}"
   RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}")
 
-install(
-  TARGETS MujocoRosUtils MujocoRosUtilsPlugin
-  DESTINATION "${MUJOCO_BIN_DIR}/mujoco_plugin"
-)
+add_custom_command(
+  TARGET MujocoRosUtils POST_BUILD
+  COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:MujocoRosUtils> ${MUJOCO_BIN_DIR}/mujoco_plugin)
+
+add_custom_command(
+  TARGET MujocoRosUtilsPlugin POST_BUILD
+  COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:MujocoRosUtilsPlugin> ${MUJOCO_BIN_DIR}/mujoco_plugin)

@@ -61,7 +61,7 @@ endif()
 
 # GLFW
 find_package(glfw3 3.3 REQUIRED)
-
+set(AMENT_CMAKE_UNINSTALL_TARGET OFF)
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(tf2_ros REQUIRED)
@@ -88,6 +88,7 @@ ament_export_dependencies(rosidl_default_runtime)
 
 ament_package()
 add_subdirectory(plugin)
+add_subdirectory(xml)
 
 if(INSTALL_DOCUMENTATION)
   add_subdirectory(doc)

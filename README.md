@@ -32,8 +32,7 @@ $ wstool update -t src
 $ source /opt/ros/${ROS_DISTRO}/setup.bash
 $ rosdep install -y -r --from-paths src --ignore-src
 # Build a package.
-$ catkin init
-$ colcon build mujoco_ros_utils -DCMAKE_BUILD_TYPE=RelWithDebInfo -DMUJOCO_ROOT_DIR=<absolute path to MuJoCo>
+$ colcon build --packages-select mujoco_ros_utils --cmake-args -DCMAKE_BUILD_TYPE=RelWithDebInfo -DMUJOCO_ROOT_DIR=<absolute path to MuJoCo>
 ```
 `<absolute path to MuJoCo>` is the path to the root directory of MuJoCo.
 For example, `${HOME}/.mujoco/mujoco-2.3.5` if you installed MuJoCo from release, or `${HOME}/src/mujoco` if you installed it from source.
@@ -45,7 +44,7 @@ Assume that MuJoCo is installed in `${HOME}/.mujoco/mujoco-2.3.5` from release, 
 ```bash
 # Terminal 1
 $ cd ${HOME}/.mujoco/mujoco-2.3.5/bin
-$ ./simulate `rospack find mujoco_ros_utils`/xml/sample_mujoco_ros_utils.xml
+$ ./simulate `ros2 pkg prefix mujoco_ros_utils`/share/xml/sample_mujoco_ros_utils.xml
 # Terminal 2
 $ roslaunch mujoco_ros_utils display.launch
 ```
