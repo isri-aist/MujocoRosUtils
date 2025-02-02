@@ -73,7 +73,7 @@ protected:
   rclcpp::Node::SharedPtr nh_;
 
   //! ROS callback queue
-  rclcpp::executors::SingleThreadedExecutor executor_;
+  rclcpp::executors::SingleThreadedExecutor::SharedPtr executor_;
 
   //! ROS publisher for external force
   rclcpp::Subscription<mujoco_ros_utils::msg::ExternalForce>::SharedPtr sub_;

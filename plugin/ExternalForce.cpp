@@ -133,7 +133,8 @@ ExternalForce::ExternalForce(const mjModel *, // m
   sub_ = nh_->create_subscription<mujoco_ros_utils::msg::ExternalForce>(
     topic_name, 1, std::bind(&ExternalForce::callback, this, std::placeholders::_1));
   // Use a dedicated queue so as not to call callbacks of other modules
-  executor_.add_node(nh_);
+  executor_ = std::make_shared<rclcpp::executors::SingleThreadedExecutor>();
+  executor_->add_node(nh_);
 }
 
 void ExternalForce::reset(const mjModel *, // m
@@ -149,7 +150,7 @@ void ExternalForce::compute(const mjModel *, // m
 )
 {
   // Call ROS callback
-  executor_.spin_once(std::chrono::seconds(0));
+  executor_->spin_once(std::chrono::seconds(0));
 
   if(end_time_ >= 0 && end_time_ <= d->time)
   {

@@ -46,7 +46,7 @@ Assume that MuJoCo is installed in `${HOME}/.mujoco/mujoco-2.3.5` from release, 
 $ cd ${HOME}/.mujoco/mujoco-2.3.5/bin
 $ ./simulate `ros2 pkg prefix mujoco_ros_utils`/share/xml/sample_mujoco_ros_utils.xml
 # Terminal 2
-$ roslaunch mujoco_ros_utils display.launch
+$ ros2 launch mujoco_ros_utils display.launch.py
 ```
 To visualize a point cloud restored from a depth image, add the `points:=true` option to `display.launch`.
 (`ros-${ROS_DISTRO}-depth-image-proc` must be installed.)

@@ -69,7 +69,7 @@ protected:
   //! ROS variables
   //! @{
   rclcpp::Node::SharedPtr nh_;
-  rclcpp::executors::SingleThreadedExecutor executor_;
+  rclcpp::executors::SingleThreadedExecutor::SharedPtr executor_;
   rclcpp::Subscription<std_msgs::msg::Float64>::SharedPtr sub_;
   //! @}
 };

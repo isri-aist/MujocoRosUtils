@@ -123,11 +123,12 @@ ActuatorCommand::ActuatorCommand(const mjModel * m,
   }
   rclcpp::NodeOptions node_options;
 
-  nh_ = rclcpp::Node::make_shared("mujoco_ros", node_options);
+  nh_ = rclcpp::Node::make_shared("actuator_command", node_options);
   sub_ = nh_->create_subscription<std_msgs::msg::Float64>(
     topic_name, 1, std::bind(&ActuatorCommand::callback, this, std::placeholders::_1));
-  // Use a dedicated queue so as not to call callbacks of other modules
-  executor_.add_node(nh_);
+  // // Use a dedicated queue so as not to call callbacks of other modules
+  executor_ = std::make_shared<rclcpp::executors::SingleThreadedExecutor>();
+  executor_->add_node(nh_);
 }
 
 void ActuatorCommand::reset(const mjModel *, // m
@@ -142,7 +143,7 @@ void ActuatorCommand::compute(const mjModel *, // m
 )
 {
   // Call ROS callback
-  executor_.spin_once(std::chrono::seconds(0));
+  executor_->spin_once(std::chrono::seconds(0));
 
   // Set actuator command
   if(!std::isnan(ctrl_))
