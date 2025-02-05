@@ -1,6 +1,11 @@
 #pragma once
 
-#include <ros/ros.h>
+#include <rclcpp/rclcpp.hpp>
+
+#include <geometry_msgs/msg/point_stamped.hpp>
+#include <geometry_msgs/msg/quaternion_stamped.hpp>
+#include <geometry_msgs/msg/vector3_stamped.hpp>
+#include <mujoco_ros_utils/msg/scalar_stamped.hpp>
 
 #include <mujoco/mjdata.h>
 #include <mujoco/mjmodel.h>
@@ -92,10 +97,10 @@ protected:
   std::string topic_name_;
 
   //! ROS node handle
-  std::shared_ptr<ros::NodeHandle> nh_;
+  rclcpp::Node::SharedPtr nh_;
 
   //! ROS publisher
-  ros::Publisher pub_;
+  rclcpp::PublisherBase::SharedPtr pub_;
 
   //! Iteration interval to skip ROS publish
   int publish_skip_ = 0;

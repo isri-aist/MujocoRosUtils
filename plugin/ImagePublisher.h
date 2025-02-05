@@ -1,6 +1,8 @@
 #pragma once
 
-#include <ros/ros.h>
+#include <rclcpp/rclcpp.hpp>
+#include <sensor_msgs/msg/image.hpp>
+#include <sensor_msgs/msg/camera_info.hpp>
 
 #include <mujoco/mjdata.h>
 #include <mujoco/mjmodel.h>
@@ -108,10 +110,10 @@ protected:
 
   //! ROS variables
   //! @{
-  std::shared_ptr<ros::NodeHandle> nh_;
-  ros::Publisher color_pub_;
-  ros::Publisher depth_pub_;
-  ros::Publisher info_pub_;
+  rclcpp::Node::SharedPtr nh_;
+  rclcpp::Publisher<sensor_msgs::msg::Image>::SharedPtr color_pub_;
+  rclcpp::Publisher<sensor_msgs::msg::Image>::SharedPtr depth_pub_;
+  rclcpp::Publisher<sensor_msgs::msg::CameraInfo>::SharedPtr info_pub_;
   //! @}
 };
 

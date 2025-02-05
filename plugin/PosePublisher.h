@@ -1,6 +1,9 @@
 #pragma once
 
-#include <ros/ros.h>
+#include <rclcpp/rclcpp.hpp>
+#include <geometry_msgs/msg/pose_stamped.hpp>
+#include <geometry_msgs/msg/twist_stamped.hpp>
+#include <geometry_msgs/msg/transform_stamped.hpp>
 #include <tf2_ros/transform_broadcaster.h>
 
 #include <mujoco/mjdata.h>
@@ -74,16 +77,16 @@ protected:
   int body_id_ = -1;
 
   //! ROS node handle
-  std::shared_ptr<ros::NodeHandle> nh_;
+  rclcpp::Node::SharedPtr nh_;
 
   //! ROS publisher for pose
-  ros::Publisher pose_pub_;
+  rclcpp::Publisher<geometry_msgs::msg::PoseStamped>::SharedPtr pose_pub_;
 
   //! ROS publisher for velocity
-  ros::Publisher vel_pub_;
-
+  rclcpp::Publisher<geometry_msgs::msg::TwistStamped>::SharedPtr vel_pub_;
+  
   //! TF broadcaster
-  std::shared_ptr<tf2_ros::TransformBroadcaster> tf_br_;
+  std::unique_ptr<tf2_ros::TransformBroadcaster> tf_br_;
 
   //! Frame ID of topics header or TF parent
   std::string frame_id_;

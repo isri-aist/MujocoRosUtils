@@ -123,15 +123,18 @@ ExternalForce::ExternalForce(const mjModel *, // m
 
   int argc = 0;
   char ** argv = nullptr;
-  if(!ros::isInitialized())
+  if (!rclcpp::ok()) 
   {
-    ros::init(argc, argv, "mujoco_ros", ros::init_options::NoSigintHandler);
+      rclcpp::init(argc, argv);
   }
+  rclcpp::NodeOptions node_options;
 
-  nh_ = std::make_shared<ros::NodeHandle>();
+  nh_ = rclcpp::Node::make_shared("mujoco_ros", node_options);
+  sub_ = nh_->create_subscription<mujoco_ros_utils::msg::ExternalForce>(
+    topic_name, 1, std::bind(&ExternalForce::callback, this, std::placeholders::_1));
   // Use a dedicated queue so as not to call callbacks of other modules
-  nh_->setCallbackQueue(&callbackQueue_);
-  sub_ = nh_->subscribe<mujoco_ros_utils::ExternalForce>(topic_name_, 1, &ExternalForce::callback, this);
+  executor_ = std::make_shared<rclcpp::executors::SingleThreadedExecutor>();
+  executor_->add_node(nh_);
 }
 
 void ExternalForce::reset(const mjModel *, // m
@@ -147,7 +150,7 @@ void ExternalForce::compute(const mjModel *, // m
 )
 {
   // Call ROS callback
-  callbackQueue_.callAvailable(ros::WallDuration());
+  executor_->spin_once(std::chrono::seconds(0));
 
   if(end_time_ >= 0 && end_time_ <= d->time)
   {
@@ -183,7 +186,7 @@ void ExternalForce::compute(const mjModel *, // m
 
   if(end_time_ < 0)
   {
-    end_time_ = d->time + msg_->duration.toSec();
+    end_time_ = d->time + msg_->duration.sec + msg_->duration.nanosec * 1e-9;
   }
 }
 
@@ -204,7 +207,11 @@ void ExternalForce::visualize(const mjModel *, // m
     return;
   }
 
-  mjMARKSTACK;
+  #if mjVERSION_HEADER >= 300
+    mj_markStack(d);
+  #else
+    mjMARKSTACK;
+  #endif
 
   mjtNum pos_local[3];
   pos_local[0] = msg_->pos.x;
@@ -231,17 +238,21 @@ void ExternalForce::visualize(const mjModel *, // m
   force_geom->segid = scn->ngeom;
   scn->ngeom++;
 
-  mjFREESTACK;
+  #if mjVERSION_HEADER >= 300
+    mj_freeStack(d);
+  #else
+    mjFREESTACK;
+  #endif
 }
 
-void ExternalForce::callback(const mujoco_ros_utils::ExternalForce::ConstPtr & msg)
+void ExternalForce::callback(const mujoco_ros_utils::msg::ExternalForce::SharedPtr msg)
 {
   if(end_time_ > 0)
   {
     mju_warning("[ExternalForce] New message received while processing a previous message. Ignore the new message.");
     return;
   }
-  msg_ = std::make_shared<mujoco_ros_utils::ExternalForce>(*msg);
+  msg_ = std::make_shared<mujoco_ros_utils::msg::ExternalForce>(*msg);
 }
 
 } // namespace MujocoRosUtils

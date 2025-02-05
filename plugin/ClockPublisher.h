@@ -1,7 +1,7 @@
 #pragma once
 
-#include <ros/ros.h>
-
+#include <rclcpp/rclcpp.hpp>
+#include <rosgraph_msgs/msg/clock.hpp>
 #include <mujoco/mjdata.h>
 #include <mujoco/mjmodel.h>
 #include <mujoco/mjtnum.h>
@@ -55,10 +55,10 @@ protected:
 
 protected:
   //! ROS node handle
-  std::shared_ptr<ros::NodeHandle> nh_;
+  rclcpp::Node::SharedPtr nh_;
 
   //! ROS publisher for clock
-  ros::Publisher pub_;
+  rclcpp::Publisher<rosgraph_msgs::msg::Clock>::SharedPtr pub_;
 
   //! Topic name of clock
   std::string topic_name_;

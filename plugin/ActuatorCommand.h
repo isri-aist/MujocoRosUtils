@@ -1,8 +1,7 @@
 #pragma once
 
-#include <ros/callback_queue.h>
-#include <ros/ros.h>
-#include <std_msgs/Float64.h>
+#include <rclcpp/rclcpp.hpp>
+#include <std_msgs/msg/float64.hpp>
 
 #include <mujoco/mjdata.h>
 #include <mujoco/mjmodel.h>
@@ -58,7 +57,7 @@ protected:
   /** \brief Constructor.
       \param msg command message
   */
-  void callback(const std_msgs::Float64::ConstPtr & msg);
+  void callback(const std_msgs::msg::Float64::SharedPtr msg);
 
 protected:
   //! Actuator ID
@@ -69,9 +68,9 @@ protected:
 
   //! ROS variables
   //! @{
-  std::shared_ptr<ros::NodeHandle> nh_;
-  ros::CallbackQueue callbackQueue_;
-  ros::Subscriber sub_;
+  rclcpp::Node::SharedPtr nh_;
+  rclcpp::executors::SingleThreadedExecutor::SharedPtr executor_;
+  rclcpp::Subscription<std_msgs::msg::Float64>::SharedPtr sub_;
   //! @}
 };
 
