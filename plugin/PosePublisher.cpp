@@ -1,9 +1,5 @@
 #include "PosePublisher.h"
 
-#include <geometry_msgs/PoseStamped.h>
-#include <geometry_msgs/TransformStamped.h>
-#include <geometry_msgs/TwistStamped.h>
-
 #include <mujoco/mujoco.h>
 
 #include <iostream>
@@ -189,20 +185,22 @@ PosePublisher::PosePublisher(const mjModel * m,
 
   int argc = 0;
   char ** argv = nullptr;
-  if(!ros::isInitialized())
+  if (!rclcpp::ok()) 
   {
-    ros::init(argc, argv, "mujoco_ros", ros::init_options::NoSigintHandler);
+      rclcpp::init(argc, argv);
   }
+  rclcpp::NodeOptions node_options;
 
-  nh_ = std::make_shared<ros::NodeHandle>();
+  nh_ = rclcpp::Node::make_shared("mujoco_ros", node_options);
   if(output_tf_)
   {
-    tf_br_ = std::make_shared<tf2_ros::TransformBroadcaster>();
+    tf_br_ =
+      std::make_unique<tf2_ros::TransformBroadcaster>(nh_);
   }
   else
   {
-    pose_pub_ = nh_->advertise<geometry_msgs::PoseStamped>(pose_topic_name_, 1);
-    vel_pub_ = nh_->advertise<geometry_msgs::TwistStamped>(vel_topic_name_, 1);
+    pose_pub_ = nh_->create_publisher<geometry_msgs::msg::PoseStamped>(pose_topic_name, 1);
+    vel_pub_ = nh_->create_publisher<geometry_msgs::msg::TwistStamped>(vel_topic_name, 1);
   }
 }
 
@@ -221,11 +219,11 @@ void PosePublisher::compute(const mjModel * m, mjData * d, int // plugin_id
     return;
   }
 
-  ros::Time stamp_now = ros::Time::now();
+  rclcpp::Time stamp_now = nh_->get_clock()->now();
 
   if(output_tf_)
   {
-    geometry_msgs::TransformStamped msg;
+    geometry_msgs::msg::TransformStamped msg;
     msg.header.stamp = stamp_now;
     msg.header.frame_id = frame_id_;
     msg.child_frame_id = tf_child_frame_id_;
@@ -240,7 +238,7 @@ void PosePublisher::compute(const mjModel * m, mjData * d, int // plugin_id
   }
   else
   {
-    geometry_msgs::PoseStamped pose_msg;
+    geometry_msgs::msg::PoseStamped pose_msg;
     pose_msg.header.stamp = stamp_now;
     pose_msg.header.frame_id = frame_id_;
     pose_msg.pose.position.x = d->xpos[3 * body_id_ + 0];
@@ -250,9 +248,9 @@ void PosePublisher::compute(const mjModel * m, mjData * d, int // plugin_id
     pose_msg.pose.orientation.x = d->xquat[4 * body_id_ + 1];
     pose_msg.pose.orientation.y = d->xquat[4 * body_id_ + 2];
     pose_msg.pose.orientation.z = d->xquat[4 * body_id_ + 3];
-    pose_pub_.publish(pose_msg);
+    pose_pub_->publish(pose_msg);
 
-    geometry_msgs::TwistStamped vel_msg;
+    geometry_msgs::msg::TwistStamped vel_msg;
     mjtNum vel[6];
     mj_objectVelocity(m, d, mjOBJ_XBODY, body_id_, vel, 0);
     vel_msg.header.stamp = stamp_now;
@@ -263,7 +261,7 @@ void PosePublisher::compute(const mjModel * m, mjData * d, int // plugin_id
     vel_msg.twist.angular.x = vel[0];
     vel_msg.twist.angular.y = vel[1];
     vel_msg.twist.angular.z = vel[2];
-    vel_pub_.publish(vel_msg);
+    vel_pub_->publish(vel_msg);
   }
 }
 

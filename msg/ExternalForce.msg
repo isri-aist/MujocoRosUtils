@@ -1,5 +1,5 @@
 # Duration to apply force
-duration duration
+builtin_interfaces/Duration duration
 
 # Force application point in the body frame
 geometry_msgs/Point pos

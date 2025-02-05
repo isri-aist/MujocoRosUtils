@@ -1,7 +1,5 @@
 #include "ClockPublisher.h"
-
-#include <rosgraph_msgs/Clock.h>
-
+#include <builtin_interfaces/msg/time.hpp>
 #include <mujoco/mujoco.h>
 
 #include <iostream>
@@ -129,14 +127,15 @@ ClockPublisher::ClockPublisher(const mjModel * m,
 
   int argc = 0;
   char ** argv = nullptr;
-  if(!ros::isInitialized())
+  if (!rclcpp::ok()) 
   {
-    ros::init(argc, argv, "mujoco_ros", ros::init_options::NoSigintHandler);
+      rclcpp::init(argc, argv);
   }
+  rclcpp::NodeOptions node_options;
 
-  nh_ = std::make_shared<ros::NodeHandle>();
-  pub_ = nh_->advertise<rosgraph_msgs::Clock>(topic_name_, 1);
-  nh_->setParam("/use_sim_time", use_sim_time_);
+  nh_ = rclcpp::Node::make_shared("mujoco_ros", node_options);
+  pub_ = nh_->create_publisher<rosgraph_msgs::msg::Clock>(topic_name, 1);
+  // nh_->setParam("/use_sim_time", use_sim_time_);
 }
 
 void ClockPublisher::reset(const mjModel *, // m
@@ -156,9 +155,12 @@ void ClockPublisher::compute(const mjModel *, // m
     return;
   }
 
-  rosgraph_msgs::Clock msg;
-  msg.clock.fromSec(d->time);
-  pub_.publish(msg);
+  rosgraph_msgs::msg::Clock msg;
+  builtin_interfaces::msg::Time time;
+  time.sec = static_cast<int32_t>(d->time);
+  time.nanosec = static_cast<uint32_t>((d->time - time.sec) * 1e9);
+  msg.clock = time;
+  pub_->publish(msg);
 }
 
 } // namespace MujocoRosUtils

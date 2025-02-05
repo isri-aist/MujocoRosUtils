@@ -1,13 +1,8 @@
 #include "SensorPublisher.h"
 
-#include <geometry_msgs/PointStamped.h>
-#include <geometry_msgs/QuaternionStamped.h>
-#include <geometry_msgs/Vector3Stamped.h>
-
 #include <mujoco/mujoco.h>
 
 #include <iostream>
-#include <mujoco_ros_utils/ScalarStamped.h>
 
 namespace MujocoRosUtils
 {
@@ -178,27 +173,28 @@ SensorPublisher::SensorPublisher(const mjModel * m,
 
   int argc = 0;
   char ** argv = nullptr;
-  if(!ros::isInitialized())
+  if (!rclcpp::ok()) 
   {
-    ros::init(argc, argv, "mujoco_ros", ros::init_options::NoSigintHandler);
+      rclcpp::init(argc, argv);
   }
+  rclcpp::NodeOptions node_options;
 
-  nh_ = std::make_shared<ros::NodeHandle>();
+  nh_ = rclcpp::Node::make_shared("mujoco_ros", node_options);
   if(msg_type_ == MsgScalar)
   {
-    pub_ = nh_->advertise<mujoco_ros_utils::ScalarStamped>(topic_name_, 1);
+    pub_ = nh_->create_publisher<mujoco_ros_utils::msg::ScalarStamped>(topic_name_, 1);
   }
   else if(msg_type_ == MsgPoint)
   {
-    pub_ = nh_->advertise<geometry_msgs::PointStamped>(topic_name_, 1);
+    pub_ = nh_->create_publisher<geometry_msgs::msg::PointStamped>(topic_name_, 1);
   }
   else if(msg_type_ == MsgVector3)
   {
-    pub_ = nh_->advertise<geometry_msgs::Vector3Stamped>(topic_name_, 1);
+    pub_ = nh_->create_publisher<geometry_msgs::msg::Vector3Stamped>(topic_name_, 1);
   }
   else // if(msg_type_ == MsgQuaternion)
   {
-    pub_ = nh_->advertise<geometry_msgs::QuaternionStamped>(topic_name_, 1);
+    pub_ = nh_->create_publisher<geometry_msgs::msg::QuaternionStamped>(topic_name_, 1);
   }
 }
 
@@ -217,45 +213,45 @@ void SensorPublisher::compute(const mjModel * m, mjData * d, int // plugin_id
     return;
   }
 
-  std_msgs::Header header;
-  header.stamp = ros::Time::now();
+  std_msgs::msg::Header header;
+  header.stamp = nh_->get_clock()->now();
   header.frame_id = frame_id_;
 
   int sensor_adr = m->sensor_adr[sensor_id_];
   if(msg_type_ == MsgScalar)
   {
-    mujoco_ros_utils::ScalarStamped msg;
+    mujoco_ros_utils::msg::ScalarStamped msg;
     msg.header = header;
-    msg.value = d->sensordata[sensor_adr];
-    pub_.publish(msg);
+    msg.value.data = d->sensordata[sensor_adr];
+    std::dynamic_pointer_cast<rclcpp::Publisher<mujoco_ros_utils::msg::ScalarStamped>>(pub_)->publish(msg);
   }
   else if(msg_type_ == MsgPoint)
   {
-    geometry_msgs::PointStamped msg;
+    geometry_msgs::msg::PointStamped msg;
     msg.header = header;
     msg.point.x = d->sensordata[sensor_adr + 0];
     msg.point.y = d->sensordata[sensor_adr + 1];
     msg.point.z = d->sensordata[sensor_adr + 2];
-    pub_.publish(msg);
+    std::dynamic_pointer_cast<rclcpp::Publisher<geometry_msgs::msg::PointStamped>>(pub_)->publish(msg);
   }
   else if(msg_type_ == MsgVector3)
   {
-    geometry_msgs::Vector3Stamped msg;
+    geometry_msgs::msg::Vector3Stamped msg;
     msg.header = header;
     msg.vector.x = d->sensordata[sensor_adr + 0];
     msg.vector.y = d->sensordata[sensor_adr + 1];
     msg.vector.z = d->sensordata[sensor_adr + 2];
-    pub_.publish(msg);
+    std::dynamic_pointer_cast<rclcpp::Publisher<geometry_msgs::msg::Vector3Stamped>>(pub_)->publish(msg);
   }
   else // if(msg_type_ == MsgQuaternion)
   {
-    geometry_msgs::QuaternionStamped msg;
+    geometry_msgs::msg::QuaternionStamped msg;
     msg.header = header;
     msg.quaternion.w = d->sensordata[sensor_adr + 0];
     msg.quaternion.x = d->sensordata[sensor_adr + 1];
     msg.quaternion.y = d->sensordata[sensor_adr + 2];
     msg.quaternion.z = d->sensordata[sensor_adr + 3];
-    pub_.publish(msg);
+    std::dynamic_pointer_cast<rclcpp::Publisher<geometry_msgs::msg::QuaternionStamped>>(pub_)->publish(msg);
   }
 }
 

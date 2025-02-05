@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.22)
 
 set(PROJECT_NAME mujoco_ros_utils)
 set(PROJECT_GENERATED_HEADERS_SKIP_DEPRECATED ON)
@@ -15,7 +15,7 @@ set(DOXYGEN_HTML_OUTPUT html)
 option(INSTALL_DOCUMENTATION "Generate and install the documentation" OFF)
 
 include(cmake/base.cmake)
-project(${PROJECT_NAME} LANGUAGES CXX)
+project(${PROJECT_NAME})
 
 # MuJoCo
 if(NOT DEFINED MUJOCO_ROOT_DIR)
@@ -61,39 +61,34 @@ endif()
 
 # GLFW
 find_package(glfw3 3.3 REQUIRED)
+set(AMENT_CMAKE_UNINSTALL_TARGET OFF)
+find_package(ament_cmake REQUIRED)
+find_package(rclcpp REQUIRED)
+find_package(tf2_ros REQUIRED)
+find_package(std_msgs REQUIRED)
+find_package(std_srvs REQUIRED)
+find_package(geometry_msgs REQUIRED)
+find_package(visualization_msgs REQUIRED)
+find_package(sensor_msgs REQUIRED)
+find_package(builtin_interfaces REQUIRED) 
+find_package(rosidl_default_generators REQUIRED)
 
-find_package(
-  catkin REQUIRED
-  COMPONENTS message_generation
-             roscpp
-             tf2_ros
-             eigen_conversions
-             std_msgs
-             std_srvs
-             geometry_msgs
-             visualization_msgs
-             sensor_msgs)
+rosidl_generate_interfaces(${PROJECT_NAME}
+    "msg/ExternalForce.msg"
+    "msg/ScalarStamped.msg"
+    DEPENDENCIES std_msgs geometry_msgs builtin_interfaces
+)
 
-add_message_files(FILES ScalarStamped.msg ExternalForce.msg)
+install(
+  DIRECTORY launch
+  DESTINATION share/${PROJECT_NAME}
+)
 
-generate_messages(DEPENDENCIES geometry_msgs)
+ament_export_dependencies(rosidl_default_runtime)
 
-catkin_package(
-  CATKIN_DEPENDS
-  message_runtime
-  roscpp
-  tf2_ros
-  eigen_conversions
-  std_msgs
-  std_srvs
-  geometry_msgs
-  visualization_msgs
-  sensor_msgs
-  LIBRARIES
-  MujocoRosUtils
-  MujocoRosUtilsPlugin)
-
+ament_package()
 add_subdirectory(plugin)
+add_subdirectory(xml)
 
 if(INSTALL_DOCUMENTATION)
   add_subdirectory(doc)

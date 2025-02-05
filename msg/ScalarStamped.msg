@@ -1,2 +1,2 @@
-Header header
-float64 value
+std_msgs/Header header
+std_msgs/Float64 value
