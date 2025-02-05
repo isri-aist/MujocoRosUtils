@@ -123,15 +123,15 @@ ExternalForce::ExternalForce(const mjModel *, // m
 
   int argc = 0;
   char ** argv = nullptr;
-  if (!rclcpp::ok()) 
+  if(!rclcpp::ok())
   {
-      rclcpp::init(argc, argv);
+    rclcpp::init(argc, argv);
   }
   rclcpp::NodeOptions node_options;
 
   nh_ = rclcpp::Node::make_shared("mujoco_ros", node_options);
   sub_ = nh_->create_subscription<mujoco_ros_utils::msg::ExternalForce>(
-    topic_name, 1, std::bind(&ExternalForce::callback, this, std::placeholders::_1));
+      topic_name, 1, std::bind(&ExternalForce::callback, this, std::placeholders::_1));
   // Use a dedicated queue so as not to call callbacks of other modules
   executor_ = std::make_shared<rclcpp::executors::SingleThreadedExecutor>();
   executor_->add_node(nh_);
@@ -207,11 +207,11 @@ void ExternalForce::visualize(const mjModel *, // m
     return;
   }
 
-  #if mjVERSION_HEADER >= 300
-    mj_markStack(d);
-  #else
-    mjMARKSTACK;
-  #endif
+#if mjVERSION_HEADER >= 300
+  mj_markStack(d);
+#else
+  mjMARKSTACK;
+#endif
 
   mjtNum pos_local[3];
   pos_local[0] = msg_->pos.x;
@@ -238,11 +238,11 @@ void ExternalForce::visualize(const mjModel *, // m
   force_geom->segid = scn->ngeom;
   scn->ngeom++;
 
-  #if mjVERSION_HEADER >= 300
-    mj_freeStack(d);
-  #else
-    mjFREESTACK;
-  #endif
+#if mjVERSION_HEADER >= 300
+  mj_freeStack(d);
+#else
+  mjFREESTACK;
+#endif
 }
 
 void ExternalForce::callback(const mujoco_ros_utils::msg::ExternalForce::SharedPtr msg)

@@ -1,7 +1,8 @@
 #include "ClockPublisher.h"
-#include <builtin_interfaces/msg/time.hpp>
+
 #include <mujoco/mujoco.h>
 
+#include <builtin_interfaces/msg/time.hpp>
 #include <iostream>
 
 namespace MujocoRosUtils
@@ -127,9 +128,9 @@ ClockPublisher::ClockPublisher(const mjModel * m,
 
   int argc = 0;
   char ** argv = nullptr;
-  if (!rclcpp::ok()) 
+  if(!rclcpp::ok())
   {
-      rclcpp::init(argc, argv);
+    rclcpp::init(argc, argv);
   }
   rclcpp::NodeOptions node_options;
 

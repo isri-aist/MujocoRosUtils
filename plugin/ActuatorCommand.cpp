@@ -117,15 +117,15 @@ ActuatorCommand::ActuatorCommand(const mjModel * m,
 
   int argc = 0;
   char ** argv = nullptr;
-  if (!rclcpp::ok()) 
+  if(!rclcpp::ok())
   {
-      rclcpp::init(argc, argv);
+    rclcpp::init(argc, argv);
   }
   rclcpp::NodeOptions node_options;
 
   nh_ = rclcpp::Node::make_shared("actuator_command", node_options);
   sub_ = nh_->create_subscription<std_msgs::msg::Float64>(
-    topic_name, 1, std::bind(&ActuatorCommand::callback, this, std::placeholders::_1));
+      topic_name, 1, std::bind(&ActuatorCommand::callback, this, std::placeholders::_1));
   // // Use a dedicated queue so as not to call callbacks of other modules
   executor_ = std::make_shared<rclcpp::executors::SingleThreadedExecutor>();
   executor_->add_node(nh_);

@@ -7,13 +7,21 @@ target_include_directories(
                         $<INSTALL_INTERFACE:include>)
 target_include_directories(MujocoRosUtils PRIVATE ${MUJOCO_INCLUDE_DIR})
 target_include_directories(MujocoRosUtils PUBLIC ${ament_INCLUDE_DIRS})
-ament_target_dependencies(MujocoRosUtils PUBLIC 
-  rclcpp std_msgs geometry_msgs visualization_msgs tf2_ros sensor_msgs builtin_interfaces
-)
+ament_target_dependencies(
+  MujocoRosUtils
+  PUBLIC
+  rclcpp
+  std_msgs
+  geometry_msgs
+  visualization_msgs
+  tf2_ros
+  sensor_msgs
+  builtin_interfaces)
 add_dependencies(MujocoRosUtils ${PROJECT_NAME})
-rosidl_get_typesupport_target(cpp_typesupport_target 
-${PROJECT_NAME} "rosidl_typesupport_cpp")
-target_link_libraries(MujocoRosUtils PUBLIC ${cpp_typesupport_target} ${ament_LIBRARIES})
+rosidl_get_typesupport_target(cpp_typesupport_target ${PROJECT_NAME}
+                              "rosidl_typesupport_cpp")
+target_link_libraries(MujocoRosUtils PUBLIC ${cpp_typesupport_target}
+                                            ${ament_LIBRARIES})
 target_link_libraries(MujocoRosUtils PUBLIC ${LIB_MUJOCO} glfw)
 
 add_library(MujocoRosUtilsPlugin SHARED Plugin.cpp)
@@ -28,9 +36,13 @@ install(
   RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}")
 
 add_custom_command(
-  TARGET MujocoRosUtils POST_BUILD
-  COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:MujocoRosUtils> ${MUJOCO_BIN_DIR}/mujoco_plugin)
+  TARGET MujocoRosUtils
+  POST_BUILD
+  COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:MujocoRosUtils>
+          ${MUJOCO_BIN_DIR}/mujoco_plugin)
 
 add_custom_command(
-  TARGET MujocoRosUtilsPlugin POST_BUILD
-  COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:MujocoRosUtilsPlugin> ${MUJOCO_BIN_DIR}/mujoco_plugin)
+  TARGET MujocoRosUtilsPlugin
+  POST_BUILD
+  COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:MujocoRosUtilsPlugin>
+          ${MUJOCO_BIN_DIR}/mujoco_plugin)

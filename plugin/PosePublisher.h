@@ -1,9 +1,9 @@
 #pragma once
 
-#include <rclcpp/rclcpp.hpp>
 #include <geometry_msgs/msg/pose_stamped.hpp>
-#include <geometry_msgs/msg/twist_stamped.hpp>
 #include <geometry_msgs/msg/transform_stamped.hpp>
+#include <geometry_msgs/msg/twist_stamped.hpp>
+#include <rclcpp/rclcpp.hpp>
 #include <tf2_ros/transform_broadcaster.h>
 
 #include <mujoco/mjdata.h>
@@ -84,7 +84,7 @@ protected:
 
   //! ROS publisher for velocity
   rclcpp::Publisher<geometry_msgs::msg::TwistStamped>::SharedPtr vel_pub_;
-  
+
   //! TF broadcaster
   std::unique_ptr<tf2_ros::TransformBroadcaster> tf_br_;
 

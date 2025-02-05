@@ -70,19 +70,19 @@ find_package(std_srvs REQUIRED)
 find_package(geometry_msgs REQUIRED)
 find_package(visualization_msgs REQUIRED)
 find_package(sensor_msgs REQUIRED)
-find_package(builtin_interfaces REQUIRED) 
+find_package(builtin_interfaces REQUIRED)
 find_package(rosidl_default_generators REQUIRED)
 
-rosidl_generate_interfaces(${PROJECT_NAME}
-    "msg/ExternalForce.msg"
-    "msg/ScalarStamped.msg"
-    DEPENDENCIES std_msgs geometry_msgs builtin_interfaces
-)
+rosidl_generate_interfaces(
+  ${PROJECT_NAME}
+  "msg/ExternalForce.msg"
+  "msg/ScalarStamped.msg"
+  DEPENDENCIES
+  std_msgs
+  geometry_msgs
+  builtin_interfaces)
 
-install(
-  DIRECTORY launch
-  DESTINATION share/${PROJECT_NAME}
-)
+install(DIRECTORY launch DESTINATION share/${PROJECT_NAME})
 
 ament_export_dependencies(rosidl_default_runtime)
 

@@ -185,17 +185,16 @@ PosePublisher::PosePublisher(const mjModel * m,
 
   int argc = 0;
   char ** argv = nullptr;
-  if (!rclcpp::ok()) 
+  if(!rclcpp::ok())
   {
-      rclcpp::init(argc, argv);
+    rclcpp::init(argc, argv);
   }
   rclcpp::NodeOptions node_options;
 
   nh_ = rclcpp::Node::make_shared("mujoco_ros", node_options);
   if(output_tf_)
   {
-    tf_br_ =
-      std::make_unique<tf2_ros::TransformBroadcaster>(nh_);
+    tf_br_ = std::make_unique<tf2_ros::TransformBroadcaster>(nh_);
   }
   else
   {
