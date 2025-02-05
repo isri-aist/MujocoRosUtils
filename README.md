@@ -1,3 +1,5 @@
+**This is the branch for ROS2; use [the ros1 branch](https://github.com/isri-aist/MujocoRosUtils/tree/ros1) for ROS1.**
+
 # [MujocoRosUtils](https://github.com/isri-aist/MujocoRosUtils)
 ROS-based MuJoCo utilities
 
