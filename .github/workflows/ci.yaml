@@ -62,7 +62,7 @@ jobs:
         run: |
           set -e
           set -x
-          cd ${GITHUB_WORKSPACE}/catkin_ws/src/${{ github.repository }}
+          cd ${GITHUB_WORKSPACE}/colcon_ws/src/${{ github.repository }}
           git config --global user.name "Masaki Murooka"
           git config --global user.email "m-murooka@aist.go.jp"
           git remote set-url origin "https://github.com/${{ github.repository }}"
@@ -71,7 +71,7 @@ jobs:
           rm -rf cmake/
           git checkout --quiet gh-pages
           rm -rf doxygen/
-          cp -r ${GITHUB_WORKSPACE}/catkin_ws/build/mujoco_ros_utils/doc/html/ doxygen
+          cp -r ${GITHUB_WORKSPACE}/colcon_ws/build/mujoco_ros_utils/doc/doxygen-html/ doxygen
           git add doxygen
           git_status=`git status -s`
           if test -n "$git_status"; then
