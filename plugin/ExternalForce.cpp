@@ -172,7 +172,7 @@ void ExternalForce::compute(const mjModel *, // m
   force[1] = msg_->force.y;
   force[2] = msg_->force.z;
   mjtNum pos_world[3];
-  mju_rotVecMat(pos_world, pos_local, d->xmat + 9 * body_id_);
+  mju_rotVecQuat(pos_world, pos_local, d->xmat + 9 * body_id_);
   mju_addTo3(pos_world, d->xpos + 3 * body_id_);
   mjtNum moment_arm[3];
   mju_sub3(moment_arm, pos_world, d->xipos + 3 * body_id_);
@@ -222,6 +222,33 @@ void ExternalForce::visualize(const mjModel *, // m
   force[1] = msg_->force.y;
   force[2] = msg_->force.z;
   mjtNum pos_world[3];
+#if mjVERSION_HEADER >= 325
+  mju_mulMatVec(pos_world, d->xmat + 9 * body_id_, pos_local, 3, 3);
+  mju_addTo3(pos_world, d->xpos + 3 * body_id_);
+
+  mjtNum arrow_end[3];
+  mju_addScl3(arrow_end, pos_world, force, vis_scale_);
+
+  mjtNum dir[3];
+  mju_sub3(dir, arrow_end, pos_world);
+  mjtNum length = mju_norm3(dir);
+  if(length > 0)
+  {
+    mju_scl3(dir, dir, 1.0 / length);
+  }
+
+  float rgba[4] = {1.0, 0.0, 0.0, 1.0};
+  constexpr mjtNum width = 0.01;
+  mjvGeom * force_geom = scn->geoms + scn->ngeom;
+  mjv_initGeom(force_geom, mjGEOM_ARROW, dir, pos_world, NULL, rgba);
+  force_geom->size[0] = static_cast<float>(width);
+  force_geom->size[1] = static_cast<float>(width * 2.0);
+  force_geom->size[2] = static_cast<float>(length);
+  force_geom->objtype = mjOBJ_UNKNOWN;
+  force_geom->objid = -1;
+  force_geom->category = mjCAT_DECOR;
+  scn->ngeom++;
+#else
   mju_rotVecMat(pos_world, pos_local, d->xmat + 9 * body_id_);
   mju_addTo3(pos_world, d->xpos + 3 * body_id_);
   mjtNum arrow_end[3];
@@ -237,6 +264,7 @@ void ExternalForce::visualize(const mjModel *, // m
   force_geom->category = mjCAT_DECOR;
   force_geom->segid = scn->ngeom;
   scn->ngeom++;
+#endif
 
 #if mjVERSION_HEADER >= 300
   mj_freeStack(d);
