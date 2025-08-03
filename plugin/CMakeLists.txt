@@ -27,6 +27,9 @@ target_link_libraries(MujocoRosUtils PUBLIC ${LIB_MUJOCO} glfw)
 add_library(MujocoRosUtilsPlugin SHARED Plugin.cpp)
 target_include_directories(MujocoRosUtilsPlugin PRIVATE ${MUJOCO_INCLUDE_DIR})
 target_link_libraries(MujocoRosUtilsPlugin PUBLIC MujocoRosUtils)
+set_target_properties(
+  MujocoRosUtils MujocoRosUtilsPlugin
+  PROPERTIES INSTALL_RPATH "${MUJOCO_BIN_DIR}:${MUJOCO_LIB_DIR}")
 
 install(
   TARGETS MujocoRosUtils MujocoRosUtilsPlugin
