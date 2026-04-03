@@ -7,17 +7,12 @@
 #include "PosePublisher.h"
 #include "SensorPublisher.h"
 
-namespace MujocoRosUtils
-{
-
 mjPLUGIN_LIB_INIT
 {
-  ClockPublisher::RegisterPlugin();
-  PosePublisher::RegisterPlugin();
-  ImagePublisher::RegisterPlugin();
-  ActuatorCommand::RegisterPlugin();
-  ExternalForce::RegisterPlugin();
-  SensorPublisher::RegisterPlugin();
+  MujocoRosUtils::ClockPublisher::RegisterPlugin();
+  MujocoRosUtils::PosePublisher::RegisterPlugin();
+  MujocoRosUtils::ImagePublisher::RegisterPlugin();
+  MujocoRosUtils::ActuatorCommand::RegisterPlugin();
+  MujocoRosUtils::ExternalForce::RegisterPlugin();
+  MujocoRosUtils::SensorPublisher::RegisterPlugin();
 }
-
-} // namespace MujocoRosUtils

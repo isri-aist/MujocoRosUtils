@@ -1,7 +1,8 @@
 add_library(
-  MujocoRosUtils SHARED
+  MujocoRosUtils STATIC
   ClockPublisher.cpp PosePublisher.cpp ImagePublisher.cpp ActuatorCommand.cpp
   ExternalForce.cpp SensorPublisher.cpp)
+set_target_properties(MujocoRosUtils PROPERTIES POSITION_INDEPENDENT_CODE ON)
 target_include_directories(
   MujocoRosUtils PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
                         $<INSTALL_INTERFACE:include>)
@@ -28,11 +29,10 @@ add_library(MujocoRosUtilsPlugin SHARED Plugin.cpp)
 target_include_directories(MujocoRosUtilsPlugin PRIVATE ${MUJOCO_INCLUDE_DIR})
 target_link_libraries(MujocoRosUtilsPlugin PUBLIC MujocoRosUtils)
 set_target_properties(
-  MujocoRosUtils MujocoRosUtilsPlugin
-  PROPERTIES INSTALL_RPATH "${MUJOCO_BIN_DIR}:${MUJOCO_LIB_DIR}")
+  MujocoRosUtilsPlugin PROPERTIES INSTALL_RPATH "${MUJOCO_BIN_DIR}:${MUJOCO_LIB_DIR}")
 
 install(
-  TARGETS MujocoRosUtils MujocoRosUtilsPlugin
+  TARGETS MujocoRosUtilsPlugin
   EXPORT "${TARGETS_EXPORT_NAME}"
   LIBRARY DESTINATION ${MUJOCO_BIN_DIR}/mujoco_plugin
   ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}"
